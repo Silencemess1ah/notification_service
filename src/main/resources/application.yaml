@@ -10,6 +10,7 @@ spring:
         likePostChannel: like_post_channel
         newComment: new_comment_channel
         skillAcquiredChannel: skill_acquired_channel
+        projectChannel: project_channel
 
   mail:
     host: smtp.gmail.com
