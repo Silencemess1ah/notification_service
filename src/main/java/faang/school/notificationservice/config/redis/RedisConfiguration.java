@@ -6,6 +6,7 @@ import faang.school.notificationservice.listener.comment.NewCommentEventListener
 import faang.school.notificationservice.listener.follower.FollowerEventListener;
 import faang.school.notificationservice.listener.goal.GoalCompletedEventListener;
 import faang.school.notificationservice.listener.like.LikePostEventListener;
+import faang.school.notificationservice.listener.projectfollower.ProjectFollowerMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -32,12 +33,11 @@ public class RedisConfiguration {
 
     @Bean
     public RedisMessageListenerContainer redisContainer(List<Pair<MessageListenerAdapter, ChannelTopic>> requesters,
-                                                        JedisConnectionFactory jedisConnectionFactory) {
+            JedisConnectionFactory jedisConnectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory);
         requesters.forEach(
-                (requester) -> container.addMessageListener(requester.getFirst(), requester.getSecond())
-        );
+                (requester) -> container.addMessageListener(requester.getFirst(), requester.getSecond()));
 
         return container;
     }
@@ -88,7 +88,8 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public MessageListenerAdapter skillAcquiredListener(SkillAcquiredEventMessageListener skillAcquiredEventMessageListener) {
+    public MessageListenerAdapter skillAcquiredListener(
+            SkillAcquiredEventMessageListener skillAcquiredEventMessageListener) {
         return new MessageListenerAdapter(skillAcquiredEventMessageListener);
     }
 
@@ -103,38 +104,57 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public Pair<MessageListenerAdapter, ChannelTopic>  skillAcquiredPair(MessageListenerAdapter skillAcquiredListener,
-                                                                         ChannelTopic skillAcquiredTopic){
-        return  Pair.of(skillAcquiredListener, skillAcquiredTopic);
+    public Pair<MessageListenerAdapter, ChannelTopic> skillAcquiredPair(MessageListenerAdapter skillAcquiredListener,
+            ChannelTopic skillAcquiredTopic) {
+        return Pair.of(skillAcquiredListener, skillAcquiredTopic);
+    }
+
+    @Bean
+    public ChannelTopic projectFollowerTopic() {
+        return new ChannelTopic(redisProperties.getChannels().getProjectChannel());
+    }
+
+    @Bean
+    public MessageListenerAdapter projectFollowerMessageListenerAdapter(
+            ProjectFollowerMessageListener projectFollowerMessageListener) {
+        return new MessageListenerAdapter(projectFollowerMessageListener);
     }
 
     @Bean
     public Pair<MessageListenerAdapter, ChannelTopic> followerPair(MessageListenerAdapter followerMessageListener,
-                                                                   ChannelTopic followerTopic) {
+            ChannelTopic followerTopic) {
         return Pair.of(followerMessageListener, followerTopic);
     }
 
     @Bean
-    public Pair<MessageListenerAdapter, ChannelTopic> goalCompletedPair(MessageListenerAdapter goalCompletedMessageListener,
-                                                                        ChannelTopic goalCompletedEventTopic) {
+    public Pair<MessageListenerAdapter, ChannelTopic> goalCompletedPair(
+            MessageListenerAdapter goalCompletedMessageListener,
+            ChannelTopic goalCompletedEventTopic) {
         return Pair.of(goalCompletedMessageListener, goalCompletedEventTopic);
     }
 
     @Bean
     public Pair<MessageListenerAdapter, ChannelTopic> likePostPair(MessageListenerAdapter likePostMessageListener,
-                                                                   ChannelTopic likePostTopic) {
+            ChannelTopic likePostTopic) {
         return Pair.of(likePostMessageListener, likePostTopic);
     }
 
     @Bean
     public Pair<MessageListenerAdapter, ChannelTopic> newCommentPair(MessageListenerAdapter newCommentMessageListener,
-                                                                     ChannelTopic newCommentEventTopic) {
+            ChannelTopic newCommentEventTopic) {
         return Pair.of(newCommentMessageListener, newCommentEventTopic);
     }
 
     @Bean
     public Pair<MessageListenerAdapter, ChannelTopic> achievementPair(MessageListenerAdapter achievementMessageListener,
-                                                                      ChannelTopic achievementEventTopic) {
+            ChannelTopic achievementEventTopic) {
         return Pair.of(achievementMessageListener, achievementEventTopic);
+    }
+
+    @Bean
+    public Pair<MessageListenerAdapter, ChannelTopic> projectPair(
+            MessageListenerAdapter projectFollowerMessageListenerAdapter,
+            ChannelTopic projectFollowerTopic) {
+        return Pair.of(projectFollowerMessageListenerAdapter, projectFollowerTopic);
     }
 }
