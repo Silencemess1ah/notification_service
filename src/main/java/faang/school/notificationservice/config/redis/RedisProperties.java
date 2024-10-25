@@ -22,5 +22,6 @@ public class RedisProperties {
         private String likePostChannel;
         private String newComment;
         private String recommendationRequestEvent;
+        private String skillAcquiredChannel;
     }
 }
