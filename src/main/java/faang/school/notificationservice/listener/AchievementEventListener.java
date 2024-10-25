@@ -16,10 +16,11 @@ import java.util.List;
 @Component
 @Slf4j
 public class AchievementEventListener extends AbstractKafkaEventListener<AchievementEvent, String> {
-    public AchievementEventListener(ObjectMapper objectMapper, UserServiceClient userServiceClient, List<NotificationService> notificationServices, List<MessageBuilder<AchievementEvent>> messageBuilders) {
+    public AchievementEventListener(ObjectMapper objectMapper, UserServiceClient userServiceClient,
+                                    List<NotificationService> notificationServices,
+                                    List<MessageBuilder<AchievementEvent>> messageBuilders) {
         super(objectMapper, userServiceClient, notificationServices, messageBuilders);
     }
-
 
     @Override
     @KafkaListener(topics = "${spring.kafka.topics.achievement-received.name}", groupId = "${spring.kafka.consumer.group-id}")
@@ -27,13 +28,11 @@ public class AchievementEventListener extends AbstractKafkaEventListener<Achieve
         AchievementEvent event = null;
         try {
             event = objectMapper.readValue(message, AchievementEvent.class);
+            log.info("received: {}", event);
+            UserDto user = userServiceClient.getUser(event.getUserId());
+            sendNotification(user, getMessage(user, event));
         } catch (IOException e) {
             log.error("error converting json to obj", e);
-        }
-        log.info("received: {}", event);
-        UserDto user = userServiceClient.getUser(event.getUserId());
-        try {
-            sendNotification(user, getMessage(user, event));
         } catch (Exception e) {
             log.error("notification didnt send", e);
             return;
