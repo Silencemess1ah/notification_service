@@ -53,9 +53,7 @@ public class ProfileViewEventListenerTest {
         };
         profileAuthor = new UserDto();
         profileAuthor.setLocale(new Locale("en", "US"));
-        event = new ProfileViewEvent();
-        event.setAuthorId(1L);
-        event.setViewerId(2L);
+        event = new ProfileViewEvent(2L,1L);
     }
 
     @Test
