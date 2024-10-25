@@ -29,11 +29,11 @@ public class LikeEventListener extends AbstractEventListener<LikeEvent> {
         try {
             log.info("LikeEventListener listens for messages");
             LikeEvent event = objectMapper.readValue(message.getBody(), LikeEvent.class);
-            UserDto user = userServiceClient.getUser(event.getAuthorLikeId());
+            UserDto user = userServiceClient.getUser(event.getLikeAuthorId());
             String text = getMessage(user, event);
             sendNotification(user, text);
             log.info("LikeEventListener sent a message. Author like id: {}, post id: {}",
-                    event.getAuthorLikeId(), event.getAuthorPostId());
+                    event.getLikeAuthorId(), event.getPostAuthorId());
         } catch (IOException exception) {
             log.info("Failed to deserialize like event", exception);
         }

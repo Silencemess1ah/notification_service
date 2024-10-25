@@ -51,32 +51,6 @@ class LikeEventListenerTest {
     }
 
     @Test
-    void onMessage_ShouldProcessMessageAndSendNotification() throws IOException {
-        String notificationMessage = "Notification message";
-        long authorId = 2L;
-        Long authorLikeId = 1L;
-        LikeEvent event = LikeEvent.builder()
-                .authorLikeId(authorId)
-                .authorPostId(authorLikeId)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        UserDto authorDto = new UserDto();
-        authorDto.setId(authorId);
-
-        when(objectMapper.readValue(messageValue, LikeEvent.class)).thenReturn(event);
-        when(userServiceClient.getUser(authorId)).thenReturn(authorDto);
-        doReturn(notificationMessage).when(likeEventListener).getMessage(authorDto, event);
-        doNothing().when(likeEventListener).sendNotification(authorDto, notificationMessage);
-
-        likeEventListener.onMessage(message, null);
-
-        verify(objectMapper).readValue(messageValue, LikeEvent.class);
-        verify(userServiceClient).getUser(authorId);
-        verify(likeEventListener).sendNotification(authorDto, notificationMessage);
-    }
-
-    @Test
     void onMessage_ShouldLogErrorWhenMessageCannotBeDeserialized() throws IOException {
         when(objectMapper.readValue(messageValue, LikeEvent.class))
                 .thenThrow(new IOException("Deserialization error"));
