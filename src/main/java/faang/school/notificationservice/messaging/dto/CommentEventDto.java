@@ -11,9 +11,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentNotificationEventDto {
+public class CommentEventDto {
     private String commentAuthorName;
     private String postAuthorName;
     private String content;
-
 }

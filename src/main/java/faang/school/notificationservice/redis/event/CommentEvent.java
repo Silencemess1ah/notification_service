@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentNotificationEvent {
+public class CommentEvent {
     private Long postId;
     private Long commentId;
     private Long authorPostId;

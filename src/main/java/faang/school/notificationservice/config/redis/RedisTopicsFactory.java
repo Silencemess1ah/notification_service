@@ -14,8 +14,8 @@ public class RedisTopicsFactory {
     @Value("${spring.data.redis.channel-topics.profile-view.name}")
     private String profileViewEventTopicName;
 
-    @Value("${spring.data.redis.channel-topics.comment_notification_event.name}")
-    private String commentNotificationTopicName;
+    @Value("${spring.data.redis.channel-topics.comment_event.name}")
+    private String commentTopicName;
 
     @Bean
     public Topic eventStartTopic() {
@@ -28,7 +28,7 @@ public class RedisTopicsFactory {
     }
 
     @Bean
-    public Topic commentNotificationEventTopic() {
-        return new ChannelTopic(commentNotificationTopicName);
+    public Topic commentEventTopic() {
+        return new ChannelTopic(commentTopicName);
     }
 }

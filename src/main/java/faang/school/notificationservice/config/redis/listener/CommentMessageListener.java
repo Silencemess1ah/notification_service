@@ -6,13 +6,13 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommentNotificationMessageListener implements RedisContainerMessageListener {
+public class CommentMessageListener implements RedisContainerMessageListener {
     private final MessageListenerAdapter adapter;
     private final Topic topic;
 
-    public CommentNotificationMessageListener(MessageListener commentNotificationEventListener, Topic commentNotificationEventTopic) {
-        this.adapter = new MessageListenerAdapter(commentNotificationEventListener);
-        this.topic = commentNotificationEventTopic;
+    public CommentMessageListener(MessageListener commentEventListener, Topic commentEventTopic) {
+        this.adapter = new MessageListenerAdapter(commentEventListener);
+        this.topic = commentEventTopic;
     }
 
     @Override
