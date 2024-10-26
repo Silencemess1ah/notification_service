@@ -6,6 +6,7 @@ import faang.school.notificationservice.listener.comment.NewCommentEventListener
 import faang.school.notificationservice.listener.follower.FollowerEventListener;
 import faang.school.notificationservice.listener.goal.GoalCompletedEventListener;
 import faang.school.notificationservice.listener.like.LikePostEventListener;
+import faang.school.notificationservice.listener.profile.ProfileViewEventListener;
 import faang.school.notificationservice.listener.projectfollower.ProjectFollowerMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -83,6 +84,16 @@ public class RedisConfiguration {
     }
 
     @Bean
+    public MessageListenerAdapter profileViewMessageListener(ProfileViewEventListener profileViewEventListener) {
+        return new MessageListenerAdapter(profileViewEventListener);
+    }
+
+    @Bean
+    public ChannelTopic profileViewTopic(){
+        return new ChannelTopic(redisProperties.getChannels().getProfileView());
+    }
+
+    @Bean
     public ChannelTopic skillAcquiredTopic() {
         return new ChannelTopic(redisProperties.getChannels().getSkillAcquiredChannel());
     }
@@ -149,6 +160,12 @@ public class RedisConfiguration {
     public Pair<MessageListenerAdapter, ChannelTopic> achievementPair(MessageListenerAdapter achievementMessageListener,
             ChannelTopic achievementEventTopic) {
         return Pair.of(achievementMessageListener, achievementEventTopic);
+    }
+
+    @Bean
+    public Pair<MessageListenerAdapter, ChannelTopic> profileViewPair(MessageListenerAdapter profileViewMessageListener,
+                                                                      ChannelTopic profileViewTopic) {
+        return Pair.of(profileViewMessageListener, profileViewTopic);
     }
 
     @Bean
