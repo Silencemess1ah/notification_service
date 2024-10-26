@@ -21,6 +21,6 @@ public class RecommendationRequestEventBuilder implements MessageBuilder<Recomme
 
     @Override
     public String buildMessage(RecommendationRequestEventDto event, Locale locale) {
-        return messageSource.getMessage("recommendationRequestEvent.new", new Object[] {event.getId()}, locale);
+        return messageSource.getMessage("recommendation.completed", new Object[] {event.getId()}, locale);
     }
 }
