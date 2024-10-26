@@ -23,5 +23,6 @@ public class RedisProperties {
         private String newComment;
         private String profileView;
         private String skillAcquiredChannel;
+        private String projectChannel;
     }
 }
