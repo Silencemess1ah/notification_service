@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.User;
 
 @Data
 @AllArgsConstructor
