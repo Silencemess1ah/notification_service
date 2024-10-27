@@ -14,4 +14,5 @@ import lombok.Setter;
 public class UserFollowerEvent {
     private Long followerId;
     private Long followedUserId;
+
 }

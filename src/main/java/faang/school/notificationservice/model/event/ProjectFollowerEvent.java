@@ -11,4 +11,5 @@ public class ProjectFollowerEvent {
     private Long followerId;
     private Long projectId;
     private Long creatorId;
+
 }
