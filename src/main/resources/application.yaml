@@ -11,6 +11,8 @@ spring:
         newComment: new_comment_channel
         recommendationRequestEvent: recommendation_request_event
         skillAcquiredChannel: skill_acquired_channel
+        projectChannel: project_channel
+        profileView: profile_view_channel
 
   mail:
     host: smtp.gmail.com
