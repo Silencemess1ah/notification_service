@@ -1,6 +1,6 @@
 package faang.school.notificationservice.config.redis;
 
-import faang.school.notificationservice.dto.RedisProperties;
+import faang.school.notificationservice.config.RedisProperties;
 import faang.school.notificationservice.listener.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

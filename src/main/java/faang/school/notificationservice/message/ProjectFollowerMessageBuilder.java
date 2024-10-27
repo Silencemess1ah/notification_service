@@ -11,6 +11,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class ProjectFollowerMessageBuilder implements MessageBuilder {
     private final MessageSource messageSource;
+
     @Override
     public Class<?> getInstance() {
         return ProjectFollowerEvent.class;

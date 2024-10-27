@@ -22,6 +22,7 @@ public class ProjectFollowerEventListener extends AbstractEventListener<ProjectF
                                         List<NotificationService> notificationServices) {
         super(objectMapper, userServiceClient, messageBuilders, notificationServices);
     }
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
