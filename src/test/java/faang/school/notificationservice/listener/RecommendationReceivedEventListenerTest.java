@@ -182,8 +182,8 @@ class RecommendationReceivedEventListenerTest {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> recommendationReceivedEventListener.onMessage(message, null));
 
-        assertEquals("No such message builder " +
-                "found faang.school.notificationservice.dto.RecommendationReceivedEvent", ex.getMessage());
+        assertEquals("No such message builder "
+                + "found faang.school.notificationservice.dto.RecommendationReceivedEvent", ex.getMessage());
     }
 
     @Test
