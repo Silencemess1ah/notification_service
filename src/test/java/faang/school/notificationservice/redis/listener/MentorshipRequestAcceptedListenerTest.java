@@ -4,38 +4,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClientMock;
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.messaging.MentorshipRequestAcceptedEventMessageBuilder;
-import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.messaging.dto.MentorshipRequestAcceptedDto;
-import faang.school.notificationservice.service.NotificationService;
 import faang.school.notificationservice.service.SmsNotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class MentorshipRequestAcceptedListenerTest {
 
+    @Mock
     private UserServiceClientMock userServiceClient;
-    private MessageBuilder<MentorshipRequestAcceptedDto> messageBuilder;
-    private NotificationService notificationService;
-    private ObjectMapper objectMapper;
+    @Mock
+    private MentorshipRequestAcceptedEventMessageBuilder messageBuilder;
+    @Mock
+    private SmsNotificationService notificationService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private MentorshipRequestAcceptedListener listener;
 
     @BeforeEach
     public void setUp() {
-        userServiceClient = mock(UserServiceClientMock.class);
-        messageBuilder = mock(MentorshipRequestAcceptedEventMessageBuilder.class);
-        notificationService = mock(SmsNotificationService.class);
-        objectMapper = new ObjectMapper();
-
         listener = new MentorshipRequestAcceptedListener(userServiceClient,
                 Collections.singletonList(messageBuilder),
                 Collections.singletonList(notificationService),
@@ -45,18 +45,18 @@ public class MentorshipRequestAcceptedListenerTest {
     @Test
     public void testProcessEvent() {
         long actorId = 1L;
-        long receiverId = 2L;
+        String receiverName = "Receiver name";
         long requestId = 123L;
 
-        MentorshipRequestAcceptedDto event = new MentorshipRequestAcceptedDto(requestId, actorId, receiverId);
+        MentorshipRequestAcceptedDto event = new MentorshipRequestAcceptedDto(requestId, receiverName, actorId);
 
         UserDto userDto = new UserDto();
-        userDto.setId(receiverId);
+        userDto.setId(actorId);
         userDto.setUsername("testUser");
         userDto.setLocale(Locale.ENGLISH);
 
-        when(userServiceClient.getUser(receiverId)).thenReturn(userDto);
-        when(messageBuilder.getInstance()).thenReturn((Class) MentorshipRequestAcceptedDto.class);
+        when(userServiceClient.getUser(userDto.getId())).thenReturn(userDto);
+        when(messageBuilder.getInstance()).thenReturn(MentorshipRequestAcceptedDto.class);
         when(messageBuilder.buildMessage(event, userDto.getLocale())).thenReturn("mentorship_request.accepted");
 
         listener.processEvent(event);

@@ -21,7 +21,7 @@ public class MentorshipRequestAcceptedEventMessageBuilder implements MessageBuil
 
     @Override
     public String buildMessage(MentorshipRequestAcceptedDto event, Locale locale) {
-        Object[] args = {event.getRequestId(), event.getReceiverId()};
+        Object[] args = {event.getReceiverName()};
         return messageSource.getMessage(MENTORSHIP_REQUEST_ACCEPTED, args, locale);
     }
 }

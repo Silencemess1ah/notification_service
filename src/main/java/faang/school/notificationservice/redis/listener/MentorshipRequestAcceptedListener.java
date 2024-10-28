@@ -26,9 +26,9 @@ public class MentorshipRequestAcceptedListener extends AbstractEventListener<Men
         MessageBuilder<MentorshipRequestAcceptedDto> messageBuilder = defineBuilder();
 
         UserDto userDto = getUserDto(event.getActorId());
-        log.info("User with id {} was founded", userDto.getId());
+        log.info("User with id {} was found", userDto.getId());
         String message = messageBuilder.buildMessage(event, userDto.getLocale());
         sendNotification(userDto, message);
-        log.info("Message {} has been send to user {}", message, userDto.getUsername());
+        log.info("Message {} has been sent to user {}", message, userDto.getUsername());
     }
 }
