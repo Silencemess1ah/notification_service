@@ -3,19 +3,19 @@ package faang.school.notificationservice.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
-import faang.school.notificationservice.service.messageBuilders.MessageBuilder;
+import faang.school.notificationservice.exceptions.FileProcessingException;
 import faang.school.notificationservice.service.NotificationService;
-import feign.FeignException;
+import faang.school.notificationservice.service.messageBuilders.MessageBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+@Slf4j
 @Component
 public abstract class AbstractEventListener<T> implements MessageListener {
     protected ObjectMapper objectMapper;
@@ -51,7 +51,6 @@ public abstract class AbstractEventListener<T> implements MessageListener {
                 .buildMessage(event, Locale.UK);
     }
 
-    @Retryable(retryFor = FeignException.class, maxAttempts = 5, backoff = @Backoff(delay = 1000))
     protected void sendNotification(Long id, String message) {
         UserDto user = userServiceClient.getUser(id);
         notificationServices.stream()
@@ -65,7 +64,8 @@ public abstract class AbstractEventListener<T> implements MessageListener {
         try {
             return objectMapper.readValue(message, eventTypeClass);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("I/O error while parsing JSON", e);
+            throw new FileProcessingException("Error processing the file",e);
         }
     }
 }

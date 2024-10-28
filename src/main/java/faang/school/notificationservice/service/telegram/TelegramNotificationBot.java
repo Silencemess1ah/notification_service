@@ -19,7 +19,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Component
 @RequiredArgsConstructor
 public class TelegramNotificationBot extends TelegramLongPollingBot {
-    private final static String BOT_NAME = "TelegramNotificationBot";
+    private static final String BOT_NAME = "TelegramNotificationBot";
     private final UserServiceClient userServiceClient;
     private final TelegramUserRepository telegramUserRepository;
 
@@ -29,20 +29,20 @@ public class TelegramNotificationBot extends TelegramLongPollingBot {
             maxAttempts = 5, backoff = @Backoff(delay = 500))
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String message_text = update.getMessage().getText();
-            long chat_id = update.getMessage().getChatId();
-            if (message_text.equals("/start")) {
+            String messageText = update.getMessage().getText();
+            long chatId = update.getMessage().getChatId();
+            if (messageText.equals("/start")) {
                 String response = "Для получения оповещений предоставьте,пожалуйста, ваш id.";
-                sendMessage(chat_id, response);
+                sendMessage(chatId, response);
             } else {
-                subscribeToNotifications(message_text, chat_id);
+                subscribeToNotifications(messageText, chatId);
             }
         }
     }
 
     @Retryable(retryFor = TelegramApiException.class, maxAttempts = 5, backoff = @Backoff(delay = 500))
-    public void sendNotification(long chat_id, String notification) {
-        sendMessage(chat_id, notification);
+    public void sendNotification(long chatId, String notification) {
+        sendMessage(chatId, notification);
     }
 
     @Override
@@ -55,42 +55,42 @@ public class TelegramNotificationBot extends TelegramLongPollingBot {
         return "7063955480:AAFT1nYPcT1SAv8zVQj0Mz-3i2ln7PaegQg";
     }
 
-    private void subscribeToNotifications(String message_text, long chat_id) {
+    private void subscribeToNotifications(String messageText, long chatId) {
         try {
-            long userId = Long.parseLong(message_text);
-            processUserId(chat_id, userId);
+            long userId = Long.parseLong(messageText);
+            processUserId(chatId, userId);
         } catch (NumberFormatException e) {
             String response = "Предоставьте корректный id";
-            sendMessage(chat_id, response);
+            sendMessage(chatId, response);
         }
     }
 
-    private void processUserId(long chat_id, long userId) {
+    private void processUserId(long chatId, long userId) {
         if (userServiceClient.isUserExists(userId)) {
             String response = "Вы подписались на получение оповещений";
-            TelegramUser telegramUser = TelegramUser.builder().chatId(chat_id).userId(userId).build();
-            if (!telegramUserRepository.existsByChatId(chat_id)) {
+            TelegramUser telegramUser = TelegramUser.builder().chatId(chatId).userId(userId).build();
+            if (!telegramUserRepository.existsByChatId(chatId)) {
                 telegramUserRepository.save(telegramUser);
-                sendMessage(chat_id, response);
+                sendMessage(chatId, response);
             } else {
                 String response2 = "Вы уже подписались на получение оповещений";
-                sendMessage(chat_id, response2);
+                sendMessage(chatId, response2);
             }
         } else {
             String response = "Ваш аккаунт не найден";
-            sendMessage(chat_id, response);
+            sendMessage(chatId, response);
         }
     }
 
 
-    private void sendMessage(long chat_id, String response) {
+    private void sendMessage(long chatId, String response) {
         SendMessage message = SendMessage.builder()
-                .chatId(chat_id)
+                .chatId(chatId)
                 .text(response).build();
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            log.error("Message has not sent " + e);
+            log.error("Message has not sent {}", String.valueOf(e));
         }
     }
 }

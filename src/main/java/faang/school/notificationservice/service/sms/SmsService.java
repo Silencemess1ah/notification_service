@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class SmsService implements NotificationService {
-    @Value("&{vonage.api.key}")
+    @Value("${vonage.api.key}")
     private String vonageApiKey;
-    @Value("&{vonage.api.secret}")
+    @Value("${vonage.api.secret}")
     private String vonageApiSecret;
-    @Value("&{vonage.from}")
+    @Value("${vonage.from}")
     private String from;
 
     VonageClient vonageClient = VonageClient.builder()
