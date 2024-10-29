@@ -10,6 +10,8 @@ spring:
           name: like_channel
         achievement:
           name: achievement_channel
+        request-status:
+          name: request_status_notification_channel
 
   mail:
     host: smtp.gmail.com

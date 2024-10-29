@@ -2,6 +2,7 @@ package faang.school.notificationservice.config.redis;
 
 import faang.school.notificationservice.listener.FollowerEventListener;
 import faang.school.notificationservice.listener.LikeEventListener;
+import faang.school.notificationservice.listener.RequestStatusListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,11 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter messageListenerRequestStatusAdapter(RequestStatusListener requestStatusListener) {
+        return new MessageListenerAdapter(requestStatusListener);
+    }
+
+    @Bean
     public ChannelTopic followerChannelTopic() {
         return new ChannelTopic(properties.getChannels().get("follower").getName());
     }
@@ -37,18 +43,26 @@ public class RedisConfig {
     }
 
     @Bean
+    public ChannelTopic requestStatusChannelTopic() {
+        return new ChannelTopic(properties.getChannels().get("request-status").getName());
+    }
+
+    @Bean
     public RedisMessageListenerContainer container(
             RedisConnectionFactory connectionFactory,
             MessageListenerAdapter messageListenerFollowerAdapter,
             MessageListenerAdapter messageListenerLikeAdapter,
+            MessageListenerAdapter messageListenerRequestStatusAdapter,
             ChannelTopic followerChannelTopic,
-            ChannelTopic likeChannelTopic) {
+            ChannelTopic likeChannelTopic,
+            ChannelTopic requestStatusChannelTopic) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
 
         container.addMessageListener(messageListenerFollowerAdapter, followerChannelTopic);
         container.addMessageListener(messageListenerLikeAdapter, likeChannelTopic);
+        container.addMessageListener(messageListenerRequestStatusAdapter, requestStatusChannelTopic);
 
         return container;
     }
