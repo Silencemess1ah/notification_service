@@ -17,7 +17,6 @@ import java.util.List;
 @Component
 public class RequestStatusListener extends AbstractEventListener<RequestStatusEvent> {
 
-
     public RequestStatusListener(ObjectMapper objectMapper,
                                  UserServiceClient userServiceClient,
                                  List<NotificationService> notificationServices,
@@ -28,8 +27,6 @@ public class RequestStatusListener extends AbstractEventListener<RequestStatusEv
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            log.info("Request status listener received a message");
-
             RequestStatusEvent event = objectMapper.readValue(message.getBody(), RequestStatusEvent.class);
             long createdBy = event.getCreatedBy();
 
