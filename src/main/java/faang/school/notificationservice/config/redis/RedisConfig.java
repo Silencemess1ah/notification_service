@@ -63,6 +63,13 @@ public class RedisConfig {
     }
 
     @Bean
+    ChannelListenerAdapter recommendationReceivedListenerAdapter(
+            @Value("${spring.data.redis.channels.recommendation-channel.name}") String topic,
+            @Qualifier("recommendationReceivedEventListener") MessageListener listener) {
+        return new ChannelListenerAdapter(listener, topic);
+    }
+
+    @Bean
     ChannelListenerAdapter followerChannelListenerAdapter(
         @Value("${spring.data.redis.channels.follower-channel.name}") String topic,
         @Qualifier("followerEventListener") MessageListener listener
