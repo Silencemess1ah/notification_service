@@ -17,4 +17,6 @@ public class EventStartEvent {
 
     Long eventId;
     List<Long> participantIds;
+    @NotNull
+    LocalDateTime startDateTime;
 }
