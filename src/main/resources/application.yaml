@@ -40,6 +40,12 @@ vonage:
     secret: ${VONAGE_API_SECRET}
   sender: CorporationX
 
+telegram:
+  bot:
+    token: ${ENV_TELEGRAM_BOT_TOKEN}
+    name: ${ENV_TELEGRAM_BOT_NAME}
+    start-command: "/start"
+
 project-service:
     host: localhost
     port: 8082
@@ -47,4 +53,5 @@ project-service:
 user-service:
     host: localhost
     port: 8080
+    set-telegram-chat-id-uri: "/users/set-telegram-chat-id"
     url: http://${user-service.host}:${user-service.port}
