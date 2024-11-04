@@ -6,6 +6,8 @@ spring:
       port: 6379
       host: localhost
       channel:
+        profile_view_channel:
+          name: profile_view
         follower_event_channel:
           name: follower_event_channel
         achievement: achievement_channel
