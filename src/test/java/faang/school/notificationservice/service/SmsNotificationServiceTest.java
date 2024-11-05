@@ -35,7 +35,7 @@ class SmsNotificationServiceTest {
     void setUp() {
         TestDataUser testDataUser = new TestDataUser();
         userDto = testDataUser.getUserDto();
-        userDto.setPreference(UserDto.PreferredContact.SMS);
+        userDto.setPreference(UserDto.PreferredContact.PHONE);
     }
 
     @Test
