@@ -30,6 +30,7 @@ public abstract class AbstractEventListener<E> implements MessageListener {
         Optional<MessageBuilder<E>> messageBuilder = messageBuilders.stream()
                 .filter(builder -> builder.getInstance() == event.getClass())
                 .findFirst();
+
         return messageBuilder
                 .map(builder -> builder.buildMessage(user, event))
                 .orElseThrow(() -> new IllegalArgumentException("No such event handler for " + event.getClass().getSimpleName()));
