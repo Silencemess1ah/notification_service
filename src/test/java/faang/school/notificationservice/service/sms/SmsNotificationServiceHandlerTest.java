@@ -45,7 +45,7 @@ class SmsNotificationServiceHandlerTest {
     void setUp() {
         TestDataUser testDataUser = new TestDataUser();
         userDto = testDataUser.getUserDto();
-        userDto.setPreference(UserDto.PreferredContact.SMS);
+        userDto.setPreference(UserDto.PreferredContact.PHONE);
 
         bodyHandler = HttpResponse.BodyHandlers.ofString();
     }
