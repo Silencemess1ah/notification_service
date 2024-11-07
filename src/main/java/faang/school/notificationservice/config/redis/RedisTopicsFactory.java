@@ -16,6 +16,12 @@ public class RedisTopicsFactory {
 
     @Value("${spring.data.redis.channel-topics.comment_event.name}")
     private String commentTopicName;
+  
+    @Value("${spring.data.redis.channel-topics.mentorship.request_accepted}")
+    private String mentorshipRequestAcceptedTopicName;
+
+    @Value("${spring.data.redis.channel-topics.post-like.name}")
+    private String postLikeTopicName;
 
     @Bean
     public Topic eventStartTopic() {
@@ -30,5 +36,15 @@ public class RedisTopicsFactory {
     @Bean
     public Topic commentEventTopic() {
         return new ChannelTopic(commentTopicName);
+    }
+  
+    @Bean  
+    public Topic mentorshipRequestAcceptedTopicName() {
+        return new ChannelTopic(mentorshipRequestAcceptedTopicName);
+    }
+
+    @Bean
+    public Topic postLikeTopic() {
+        return new ChannelTopic(postLikeTopicName);
     }
 }

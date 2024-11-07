@@ -6,13 +6,14 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StartEventContainerMessageListener implements RedisContainerMessageListener {
+public class MentorshipRequestedAcceptContainerMessageListener implements RedisContainerMessageListener {
     private final MessageListenerAdapter adapter;
     private final Topic topic;
 
-    public StartEventContainerMessageListener(MessageListener eventStartEventListener, Topic eventStartTopic) {
-        this.adapter = new MessageListenerAdapter(eventStartEventListener);
-        this.topic = eventStartTopic;
+    public MentorshipRequestedAcceptContainerMessageListener(MessageListener mentorshipRequestAcceptedListener,
+                                                             Topic mentorshipRequestAcceptedTopicName) {
+        this.adapter = new MessageListenerAdapter(mentorshipRequestAcceptedListener);
+        this.topic = mentorshipRequestAcceptedTopicName;
     }
 
     @Override
