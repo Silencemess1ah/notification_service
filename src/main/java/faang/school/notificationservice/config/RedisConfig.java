@@ -4,11 +4,10 @@ import faang.school.notificationservice.listener.AchievementEventListener;
 import faang.school.notificationservice.listener.CommentEventListener;
 import faang.school.notificationservice.listener.GoalCompletedEventListener;
 import faang.school.notificationservice.listener.MentorshipAcceptedEventListener;
+import faang.school.notificationservice.listener.RateChangeEventListener;
 import faang.school.notificationservice.listener.RecommendationReceivedEventListener;
 import faang.school.notificationservice.listener.UserFollowerEventListener;
-import faang.school.notificationservice.listener.MentorshipAcceptedEventListener;
 import faang.school.notificationservice.listener.RecommendationRequestedEventListener;
-import faang.school.notificationservice.listener.UserFollowerEventListener;
 import faang.school.notificationservice.listener.LikePostEventListener;
 import faang.school.notificationservice.listener.MentorshipOfferedEventListener;
 import faang.school.notificationservice.listener.ProjectFollowerEventListener;
@@ -71,6 +70,9 @@ public class RedisConfig {
 
     @Value("${redis.channels.recommendation-requested}")
     private String recommendationRequestedEventChannel;
+
+    @Value("${redis.channels.rate-change}")
+    private String rateChangeEventChannel;
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
@@ -147,6 +149,11 @@ public class RedisConfig {
     }
 
     @Bean
+    public ChannelTopic rateChangeChannelTopic() {
+        return new ChannelTopic(rateChangeEventChannel);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(
             LettuceConnectionFactory lettuceConnectionFactory,
             ProjectFollowerEventListener projectFollowerEventListener,
@@ -161,27 +168,42 @@ public class RedisConfig {
             RecommendationReceivedEventListener recommendationReceivedEventListener,
             ProfileViewEventListener profileViewEventListener,
             SkillOfferedEventListener skillOfferedEventListener,
-            RecommendationRequestedEventListener recommendationRequestedEventListener) {
+            RecommendationRequestedEventListener recommendationRequestedEventListener,
+            RateChangeEventListener rateChangeEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
-        container.addMessageListener(projectFollowerEventListenerAdapter(projectFollowerEventListener), projectFollowerChannelTopic());
-        container.addMessageListener(likePostEventListenerAdapter(likePostEventListener), likePostChannelTopic());
-        container.addMessageListener(userFollowerEventListenerAdapter(userFollowerEventListener), userFollowerChannelTopic());
-        container.addMessageListener(goalCompletedEventListenerAdapter(goalCompletedEventListener), goalCompletedChannelTopic());
-        container.addMessageListener(mentorshipAcceptedEventListenerAdapter(mentorshipAcceptedEventListener), mentorshipAcceptedChannelTopic());
+        container.addMessageListener(projectFollowerEventListenerAdapter(projectFollowerEventListener),
+                projectFollowerChannelTopic());
+        container.addMessageListener(likePostEventListenerAdapter(likePostEventListener),
+                likePostChannelTopic());
+        container.addMessageListener(userFollowerEventListenerAdapter(userFollowerEventListener),
+                userFollowerChannelTopic());
+        container.addMessageListener(goalCompletedEventListenerAdapter(goalCompletedEventListener),
+                goalCompletedChannelTopic());
+        container.addMessageListener(mentorshipAcceptedEventListenerAdapter(mentorshipAcceptedEventListener),
+                mentorshipAcceptedChannelTopic());
         container.addMessageListener(commentEventListenerAdapter(commentEventListener), commentTopic());
-        container.addMessageListener(achievementEventListenerAdapter(achievementEventListener), achievementChannelTopic());
-        container.addMessageListener(skillAcquiredEventListenerAdapter(skillAcquiredEventListener), skillAcquiredChannelTopic());
-        container.addMessageListener(mentorshipOfferedEventListenerAdapter(mentorshipOfferedEventListener), mentorshipOfferedChannelTopic());
-        container.addMessageListener(recommendationReceivedEventListenerAdapter(recommendationReceivedEventListener), recommendationReceivedChannelTopic());
-        container.addMessageListener(profileViewEventListenerAdapter(profileViewEventListener), profileViewChannelTopic());
-        container.addMessageListener(skillOfferedEventListenerAdapter(skillOfferedEventListener), skillOfferedChannelTopic());
-        container.addMessageListener(recommendationRequestedEventListenerAdapter(recommendationRequestedEventListener), recommendationRequestedChannelTopic());
+        container.addMessageListener(achievementEventListenerAdapter(achievementEventListener),
+                achievementChannelTopic());
+        container.addMessageListener(skillAcquiredEventListenerAdapter(skillAcquiredEventListener),
+                skillAcquiredChannelTopic());
+        container.addMessageListener(mentorshipOfferedEventListenerAdapter(mentorshipOfferedEventListener),
+                mentorshipOfferedChannelTopic());
+        container.addMessageListener(recommendationReceivedEventListenerAdapter(recommendationReceivedEventListener),
+                recommendationReceivedChannelTopic());
+        container.addMessageListener(profileViewEventListenerAdapter(profileViewEventListener),
+                profileViewChannelTopic());
+        container.addMessageListener(skillOfferedEventListenerAdapter(skillOfferedEventListener),
+                skillOfferedChannelTopic());
+        container.addMessageListener(recommendationRequestedEventListenerAdapter(recommendationRequestedEventListener),
+                recommendationRequestedChannelTopic());
+        container.addMessageListener(rateChangeEventListenerAdapter(rateChangeEventListener), rateChangeChannelTopic());
         return container;
     }
 
     @Bean
-    public MessageListenerAdapter projectFollowerEventListenerAdapter(ProjectFollowerEventListener projectFollowerEventListener) {
+    public MessageListenerAdapter projectFollowerEventListenerAdapter(
+            ProjectFollowerEventListener projectFollowerEventListener) {
         return new MessageListenerAdapter(projectFollowerEventListener, DEFAULT_LISTENER_METHOD);
     }
 
@@ -196,17 +218,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter userFollowerEventListenerAdapter(UserFollowerEventListener userFollowerEventListener) {
+    public MessageListenerAdapter userFollowerEventListenerAdapter(
+            UserFollowerEventListener userFollowerEventListener) {
         return new MessageListenerAdapter(userFollowerEventListener, DEFAULT_LISTENER_METHOD);
     }
 
     @Bean
-    public MessageListenerAdapter goalCompletedEventListenerAdapter(GoalCompletedEventListener goalCompletedEventListener) {
+    public MessageListenerAdapter goalCompletedEventListenerAdapter(
+            GoalCompletedEventListener goalCompletedEventListener) {
         return new MessageListenerAdapter(goalCompletedEventListener, DEFAULT_LISTENER_METHOD);
     }
 
     @Bean
-    public MessageListenerAdapter mentorshipAcceptedEventListenerAdapter(MentorshipAcceptedEventListener mentorshipAcceptedEventListener) {
+    public MessageListenerAdapter mentorshipAcceptedEventListenerAdapter(
+            MentorshipAcceptedEventListener mentorshipAcceptedEventListener) {
         return new MessageListenerAdapter(mentorshipAcceptedEventListener, DEFAULT_LISTENER_METHOD);
     }
 
@@ -216,17 +241,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter mentorshipOfferedEventListenerAdapter(MentorshipOfferedEventListener mentorshipOfferedEventListener) {
+    public MessageListenerAdapter mentorshipOfferedEventListenerAdapter(
+            MentorshipOfferedEventListener mentorshipOfferedEventListener) {
         return new MessageListenerAdapter(mentorshipOfferedEventListener, DEFAULT_LISTENER_METHOD);
     }
 
     @Bean
-    public MessageListenerAdapter skillAcquiredEventListenerAdapter(SkillAcquiredEventListener skillAcquiredEventListener) {
+    public MessageListenerAdapter skillAcquiredEventListenerAdapter(
+            SkillAcquiredEventListener skillAcquiredEventListener) {
         return new MessageListenerAdapter(skillAcquiredEventListener, DEFAULT_LISTENER_METHOD);
     }
 
     @Bean
-    public MessageListenerAdapter recommendationReceivedEventListenerAdapter(RecommendationReceivedEventListener recommendationReceivedEventListener) {
+    public MessageListenerAdapter recommendationReceivedEventListenerAdapter(
+            RecommendationReceivedEventListener recommendationReceivedEventListener) {
         return new MessageListenerAdapter(recommendationReceivedEventListener, DEFAULT_LISTENER_METHOD);
     }
 
@@ -241,7 +269,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter recommendationRequestedEventListenerAdapter(RecommendationRequestedEventListener recommendationRequestedEventListener) {
+    public MessageListenerAdapter recommendationRequestedEventListenerAdapter(
+            RecommendationRequestedEventListener recommendationRequestedEventListener) {
         return new MessageListenerAdapter(recommendationRequestedEventListener, DEFAULT_LISTENER_METHOD);
+    }
+
+    @Bean
+    public MessageListenerAdapter rateChangeEventListenerAdapter(RateChangeEventListener rateChangeEventListener) {
+        return new MessageListenerAdapter(rateChangeEventListener, DEFAULT_LISTENER_METHOD);
     }
 }
