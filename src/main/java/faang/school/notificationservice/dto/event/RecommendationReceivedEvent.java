@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class RecommendationReceivedEvent {
-    private Long id;
+    private Long recommendationId;
     private Long requesterId;
     private Long receiverId;
 }
