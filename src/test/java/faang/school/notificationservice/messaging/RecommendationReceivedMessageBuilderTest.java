@@ -59,7 +59,7 @@ public class RecommendationReceivedMessageBuilderTest {
 
     @Test
     public void testBuildMessage() {
-        String textAddress = "recommendation.received";
+        String textAddress = "recommendation-received";
         Object[] args = {receiverName, message, requesterName};
         String correctResult = "Hi John, Alice has recommended you with the following message: \"You are a great team player!\"";
 
