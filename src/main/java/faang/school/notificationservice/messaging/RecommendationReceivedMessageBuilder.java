@@ -33,6 +33,6 @@ public class RecommendationReceivedMessageBuilder extends MessageBuilder<Recomme
                 requester.getUsername()
         };
 
-        return messageSource.getMessage("recommendation-received", args, userDto.getLocale());
+        return messageSource.getMessage("recommendation.received", args, userDto.getLocale());
     }
 }
