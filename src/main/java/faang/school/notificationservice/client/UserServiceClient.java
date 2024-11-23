@@ -24,5 +24,4 @@ public interface UserServiceClient {
     @GetMapping("/recommendation/request/{id}")
     RecommendationRequestDto getRecommendationRequest(@PathVariable long id);
 
-
 }
