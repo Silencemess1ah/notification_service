@@ -22,7 +22,8 @@ public class RecommendationReceivedEventListener extends AbstractEventListener<R
     public RecommendationReceivedEventListener(ObjectMapper objectMapper,
                                                UserServiceClient userServiceClient,
                                                List<NotificationService> notificationServices,
-                                               List<MessageBuilder<RecommendationReceivedEvent>> messageBuilders, MessageDeserializer messageDeserializer) {
+                                               List<MessageBuilder<RecommendationReceivedEvent>> messageBuilders,
+                                               MessageDeserializer messageDeserializer) {
         super(objectMapper, userServiceClient, notificationServices, messageBuilders);
         this.messageDeserializer = messageDeserializer;
     }

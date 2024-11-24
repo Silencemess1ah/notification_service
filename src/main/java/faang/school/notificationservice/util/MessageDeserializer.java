@@ -2,10 +2,12 @@ package faang.school.notificationservice.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Slf4j
+@Component
 public class MessageDeserializer {
     private final ObjectMapper objectMapper;
 
