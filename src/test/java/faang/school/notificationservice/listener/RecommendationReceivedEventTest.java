@@ -55,7 +55,7 @@ public class RecommendationReceivedEventTest {
     }
 
     @Test
-    void onMessage_ShouldProcessMessageAndSendNotification() throws IOException {
+    void onMessage_ShouldProcessMessageAndSendNotification() {
         String notificationMessage = "Notification message";
         long receiverId = 1L;
         RecommendationReceivedEvent event = new RecommendationReceivedEvent();
