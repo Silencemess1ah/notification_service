@@ -10,6 +10,8 @@ spring:
           name: like_channel
         achievement:
           name: achievement_channel
+        recommendation-received:
+          name: recommendation_received_channel
 
   mail:
     host: smtp.gmail.com
