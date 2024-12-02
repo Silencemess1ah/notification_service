@@ -61,7 +61,7 @@ public abstract class AbstractEventListener<T> {
                     String exceptionMessage =
                             String.format("Notification service wasn't found for user notification preference - %s",
                                     user.getPreference());
-                    NotFoundException e = new NotFoundException(message);
+                    NotFoundException e = new NotFoundException(exceptionMessage);
                     log.error(exceptionMessage, e);
                     return e;
                 })
