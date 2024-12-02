@@ -8,12 +8,14 @@ import faang.school.notificationservice.exception.NotFoundException;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.MappingException;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractEventListener<T> {
 
@@ -27,8 +29,11 @@ public abstract class AbstractEventListener<T> {
             T event = objectMapper.readValue(message, eventType);
             processingEvent.accept(event);
         } catch (JsonProcessingException e) {
-            throw new MappingException(String.format("Unable to parse event: %s, with message: %s",
-                    eventType.getName(), message));
+            String exceptionMessage = String.format("Unable to parse event: %s, with message: %s",
+                    eventType.getName(), message);
+            MappingException mappingException = new MappingException(exceptionMessage, e);
+            log.error(exceptionMessage, e);
+            throw mappingException;
         }
     }
 
@@ -37,9 +42,13 @@ public abstract class AbstractEventListener<T> {
                 .filter(messageBuilder -> messageBuilder.supportEventType() == event.getClass())
                 .findFirst()
                 .map(messageBuilder -> messageBuilder.buildMessage(event, userLocale))
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Message wasn't found for event type - %s",
-                                event.getClass().getName())));
+                .orElseThrow(() -> {
+                    String exceptionMessage = String.format("Message wasn't found for event type - %s",
+                            event.getClass().getName());
+                    NotFoundException e = new NotFoundException(exceptionMessage);
+                    log.error(exceptionMessage, e);
+                    return e;
+                });
     }
 
     public void sendNotification(long receiverId, String message) {
@@ -48,10 +57,15 @@ public abstract class AbstractEventListener<T> {
                 .filter(notificationService -> notificationService.getPreferredContact().
                         equals(user.getPreference()))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Notification service wasn't found for user notification preference - %s",
-                                user.getPreference())
-                ))
+                .orElseThrow(() -> {
+                    String exceptionMessage =
+                            String.format("Notification service wasn't found for user notification preference - %s",
+                                    user.getPreference());
+                    NotFoundException e = new NotFoundException(message);
+                    log.error(exceptionMessage, e);
+                    return e;
+                })
                 .send(user, message);
+        log.info(String.format("Notification service sent notification - %s .To user with id %d", message, receiverId));
     }
 }
