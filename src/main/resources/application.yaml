@@ -32,7 +32,6 @@ logging:
   level:
     root: info
 
-#РњРѕР¶РЅРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ Р°РєРєР°СѓРЅС‚ Р±РµР· РїСЂРёРІСЏР·РєРё РєР°СЂС‚С‹. Р‘СѓРґРµС‚ 2 РµРІСЂРѕ РЅР° РѕС‚РїСЂР°РІРєСѓ С‚РµСЃС‚РѕРІС‹С… SMS
 vonage: #https://dashboard.nexmo.com/getting-started/sms
   api:
     key: whatever
