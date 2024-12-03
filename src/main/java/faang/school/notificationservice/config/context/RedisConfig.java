@@ -58,7 +58,6 @@ public class RedisConfig {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 
-        // Настройка сериализаторов для ключей и значений
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapperForRedisConfig()));
 
@@ -71,14 +70,12 @@ public class RedisConfig {
         logger.info("Настройка ObjectMapper для поддержки LocalDateTime.");
         ObjectMapper mapper = new ObjectMapper();
 
-        // Регистрация модуля для Java Time API
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeArrayDeserializer());
         mapper.registerModule(javaTimeModule);
 
-        // Настройки формата даты и времени
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Формат даты в ISO-8601
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Игнорировать неизвестные поля
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         logger.info("ObjectMapper успешно настроен.");
         return mapper;
