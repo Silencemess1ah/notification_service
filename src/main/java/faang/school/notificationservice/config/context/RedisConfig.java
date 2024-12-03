@@ -38,17 +38,23 @@ public class RedisConfig {
         logger.info("Настройка соединения с Redis: хост={}, порт={}", redisHost, redisPort);
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisConfig);
-        logger.info("Соединение с Redis успешно создано.");
+        try {
+            factory.afterPropertiesSet();
+            logger.info("Соединение с Redis успешно создано.");
+        } catch (Exception e) {
+            logger.error("Ошибка создания соединения с Redis: {}", e.getMessage());
+        }
         return factory;
     }
 
     @Bean
     public RedisMessageListenerContainer container(LettuceConnectionFactory lettuceConnectionFactory,
                                                    MessageListenerAdapter listenerAdapter) {
+        logger.info("Настройка RedisMessageListenerContainer...");
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
         container.addMessageListener(listenerAdapter, new ChannelTopic("follower_channel"));
-        logger.info("RedisMessageListenerContainer успешно настроен.");
+        logger.info("RedisMessageListenerContainer успешно настроен для канала 'follower_channel'.");
         return container;
     }
 
@@ -83,7 +89,7 @@ public class RedisConfig {
 
     @Bean
     public MessageListenerAdapter listenerAdapter(FollowerEventListener followerEventListener) {
-        logger.info("Настройка MessageListenerAdapter для обработки сообщений.");
+        logger.info("Настройка MessageListenerAdapter для обработки сообщений...");
         return new MessageListenerAdapter(followerEventListener, "onMessage");
     }
 }
