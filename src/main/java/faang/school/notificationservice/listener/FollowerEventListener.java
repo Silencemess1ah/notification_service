@@ -27,15 +27,30 @@ public class FollowerEventListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
+        log.info("Получено сообщение из Redis: {}", new String(message.getBody()));
+
         try {
             FollowerEvent followerEvent = objectMapper.readValue(message.getBody(), FollowerEvent.class);
+            log.info("Десериализовано событие: followerId={}, followeeId={}, время события={}",
+                followerEvent.getFollowerId(), followerEvent.getFolloweeId(), followerEvent.getEventTime());
+
             UserDto user = userServiceClient.getUser(followerEvent.getFolloweeId());
+            log.info("Получены данные пользователя: userId={}, email={}, предпочтение={}",
+                user.getId(), user.getEmail(), user.getPreference());
+
             String text = messageBuilder.buildMessage(followerEvent, Locale.getDefault());
+            log.info("Сформировано сообщение для уведомления: {}", text);
 
             notificationServices.stream()
                 .filter(service -> service.getPreferredContact() == user.getPreference())
                 .findFirst()
-                .ifPresent(service -> service.send(user, text));
+                .ifPresentOrElse(
+                    service -> {
+                        service.send(user, text);
+                        log.info("Уведомление отправлено через сервис: {}", service.getClass().getSimpleName());
+                    },
+                    () -> log.warn("Не найден подходящий сервис для отправки уведомления.")
+                );
 
         } catch (Exception e) {
             log.error("Ошибка обработки FollowerEvent", e);
