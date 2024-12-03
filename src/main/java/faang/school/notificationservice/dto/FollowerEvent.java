@@ -2,7 +2,7 @@ package faang.school.notificationservice.dto;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import faang.school.notificationservice.LocalDateTimeArrayDeserializer;
+import faang.school.notificationservice.deserializer.LocalDateTimeArrayDeserializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

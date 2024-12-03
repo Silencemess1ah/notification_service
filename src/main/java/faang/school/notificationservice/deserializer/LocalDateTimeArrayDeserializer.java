@@ -1,4 +1,4 @@
-package faang.school.notificationservice;
+package faang.school.notificationservice.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
