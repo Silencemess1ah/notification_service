@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    servlet:
+      path: /api/v1
   data:
     redis:
       port: 6379
@@ -10,8 +13,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: your_email@gmail.com #https://www.baeldung.com/spring-email
-    password: whatever #генерируем для своего Google аккаунта по инструкции https://support.google.com/accounts/answer/185833
+    username: manticorestream7@gmail.com
+    password: uoeg leun kfyb umjz
     properties:
       mail:
         smtp:
@@ -41,6 +44,8 @@ vonage: #https://dashboard.nexmo.com/getting-started/sms
 project-service:
     host: localhost
     port: 8082
+    path: /api/v1
 user-service:
     host: localhost
     port: 8080
+    path: /api/v1
