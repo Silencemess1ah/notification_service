@@ -15,6 +15,9 @@ import static org.mockito.Mockito.*;
 class TelegramBotImplTest {
 
     private TelegramBotImpl telegramBot;
+    private Update update;
+    private Message message;
+    private Chat chat;
 
     @BeforeEach
     public void setUp() {
@@ -22,6 +25,9 @@ class TelegramBotImplTest {
         when(botConfig.getToken()).thenReturn("dummy_token");
         when(botConfig.getUsername()).thenReturn("dummy_bot");
         telegramBot = spy(new TelegramBotImpl(botConfig));
+        update = new Update();
+        message = new Message();
+        chat = new Chat();
     }
 
     @Test
@@ -33,13 +39,7 @@ class TelegramBotImplTest {
     @Test
     @DisplayName("Test onUpdateReceived")
     void testOnUpdateReceived_WithTextMessage() throws TelegramApiException {
-        Update update = new Update();
-        Message message = new Message();
-        message.setText("Hello Bot!");
-        Chat chat = new Chat();
-        chat.setId(123456789L);
-        message.setChat(chat);
-        update.setMessage(message);
+        initializeUpdate();
 
         telegramBot.onUpdateReceived(update);
 
@@ -54,12 +54,8 @@ class TelegramBotImplTest {
     @Test
     @DisplayName("Test onUpdateReceived with no text message")
     void testOnUpdateReceived_NoTextMessage() throws TelegramApiException {
-        Update update = new Update();
-        Message message = new Message();
-        Chat chat = new Chat();
-        chat.setId(123456789L);
-        message.setChat(chat);
-        update.setMessage(message);
+        initializeUpdate();
+        message.setText(null);
 
         telegramBot.onUpdateReceived(update);
 
@@ -69,18 +65,19 @@ class TelegramBotImplTest {
     @Test
     @DisplayName("Test onUpdateReceived with TelegramApiException")
     void testOnUpdateReceived_ExceptionHandling() throws TelegramApiException {
-        Update update = new Update();
-        Message message = new Message();
-        message.setText("Hello Bot!");
-        Chat chat = new Chat();
-        chat.setId(123456789L);
-        message.setChat(chat);
-        update.setMessage(message);
+        initializeUpdate();
 
         doThrow(new TelegramApiException("API Error")).when(telegramBot).execute(any(SendMessage.class));
 
         telegramBot.onUpdateReceived(update);
 
         verify(telegramBot, times(1)).execute(any(SendMessage.class));
+    }
+
+    private void initializeUpdate() {
+        message.setText("Hello Bot!");
+        chat.setId(123456789L);
+        message.setChat(chat);
+        update.setMessage(message);
     }
 }

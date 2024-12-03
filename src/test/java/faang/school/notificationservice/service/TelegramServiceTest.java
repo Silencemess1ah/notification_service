@@ -3,6 +3,7 @@ package faang.school.notificationservice.service;
 import faang.school.notificationservice.bot.TelegramBotImpl;
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.exception.TelegramBotInitException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,14 +31,19 @@ class TelegramServiceTest {
     @InjectMocks
     private TelegramService telegramService;
 
+    private UserDto user;
+    private String message;
+    @BeforeEach
+    void setUp() {
+        user = UserDto.builder()
+                .id(123456789L)
+                .build();
+        message = "Test message";
+    }
+
     @Test
     @DisplayName("Send message to Telegram test")
     void testSendSuccess() throws TelegramApiException {
-        UserDto user = UserDto.builder()
-                .id(123456789L)
-                .build();
-        String message = "Test message";
-
         telegramService.send(user, message);
 
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
@@ -51,11 +57,6 @@ class TelegramServiceTest {
     @Test
     @DisplayName("Send message to Telegram test with TelegramApiException")
     void testSend_TelegramApiException() throws TelegramApiException {
-        UserDto user = UserDto.builder()
-                .id(123456789L)
-                .build();
-        String message = "Test message";
-
         doThrow(new TelegramApiException("API Error")).when(telegramBot).execute(any(SendMessage.class));
 
         TelegramBotInitException exception = assertThrows(TelegramBotInitException.class, () -> {
