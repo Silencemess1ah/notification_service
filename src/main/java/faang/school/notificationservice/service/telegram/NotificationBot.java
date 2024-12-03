@@ -50,7 +50,7 @@ public class NotificationBot extends TelegramLongPollingBot {
 
         try {
             execute(message);
-            log.info("Message sent to chatId {}: {}", chatId, text);
+            log.info("Message sent in Telegram chat with ID {}: {}", chatId, text);
         } catch (TelegramApiException e) {
             throw new ServiceCallException("Unable to send message in Telegram chat with ID %d".formatted(chatId), e);
         }

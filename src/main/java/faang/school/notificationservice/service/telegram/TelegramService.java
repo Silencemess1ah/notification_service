@@ -24,7 +24,6 @@ public class TelegramService implements NotificationService {
             backoff = @Backoff(delayExpression = "${telegram.notification-bot.retry.backoff-delay}", multiplier = 2)
     )
     public void send(UserDto user, String message) {
-        System.out.println("retry");
         notificationBot.sendMessage(user.getTelegramChatId(), message);
     }
 
