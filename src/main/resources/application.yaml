@@ -6,7 +6,7 @@ spring:
       channel:
         follower: follower_channel
         achievement: achievement_channel
-
+        comment: "comment_topic"
   mail:
     host: smtp.gmail.com
     port: 587
