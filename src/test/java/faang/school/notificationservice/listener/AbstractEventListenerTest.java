@@ -1,6 +1,5 @@
 package faang.school.notificationservice.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
@@ -13,12 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.redis.connection.Message;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,27 +50,32 @@ class AbstractEventListenerTest {
     }
 
     @Test
-    void processEventTest() throws JsonProcessingException {
+    void processEventTest() throws IOException {
         String eventName = "Test Event";
         long invitedId = 1L;
-        String message = "{\"name\": \"Test Event\"}";
+        String messageContent = "{\"name\": \"Test Event\"}";
         EventForTest expectedEvent = new EventForTest(invitedId, eventName);
+        Message redisMessage = mock(Message.class);
 
-        when(objectMapper.readValue(message, EventForTest.class)).thenReturn(expectedEvent);
+        when(redisMessage.getBody()).thenReturn(messageContent.getBytes(StandardCharsets.UTF_8));
+        when(objectMapper.readValue(redisMessage.getBody(), EventForTest.class)).thenReturn(expectedEvent);
 
-        eventListener.processEvent(message, EventForTest.class, event ->
-                assertEquals("Test Event", event.getName()));
+        eventListener.processEvent(redisMessage, EventForTest.class, event ->
+                assertEquals(expectedEvent.getName(), event.getName()));
 
-        verify(objectMapper, times(1)).readValue(message, EventForTest.class);
+        verify(objectMapper, times(1)).
+                readValue(redisMessage.getBody(), EventForTest.class);
     }
 
     @Test
-    void processEventThrowsJsonProcessingExceptionTest() throws JsonProcessingException {
-        String invalidMessage = "invalid json";
-        when(objectMapper.readValue(invalidMessage, EventForTest.class)).thenThrow(JsonProcessingException.class);
+    void processEventThrowsIOExceptionTest() throws IOException {
+        Message redisMessage = mock(Message.class);
+
+        when(objectMapper.readValue(redisMessage.getBody(), EventForTest.class)).
+                thenThrow(IOException.class);
 
         assertThrows(MappingException.class, () ->
-                eventListener.processEvent(invalidMessage, EventForTest.class, event -> {
+                eventListener.processEvent(redisMessage, EventForTest.class, event -> {
                 })
         );
     }
