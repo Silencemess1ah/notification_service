@@ -25,7 +25,7 @@ public class RedisConfig {
     private int redisPort;
 
     @Bean
-    public LettuceConnectionFactory jedisConnectionFactory() {
+    public LettuceConnectionFactory lettuceConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisHost, redisPort);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
@@ -33,7 +33,7 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         return redisTemplate;
     }
@@ -51,7 +51,7 @@ public class RedisConfig {
     @Bean
     RedisMessageListenerContainer redisContainer(MessageListenerAdapter followerMessageListenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(jedisConnectionFactory());
+        container.setConnectionFactory(lettuceConnectionFactory());
         container.addMessageListener(followerMessageListenerAdapter, topic());
         return container;
     }
