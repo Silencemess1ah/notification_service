@@ -39,8 +39,8 @@ public class EventStartMessageBuilderTest {
         Long eventId = 1L;
         Locale locale = Locale.ENGLISH;
         List<Long> participants = new ArrayList<>();
-        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.STARTNOW);
-        String message = "event." + EventTimeToStart.STARTNOW;
+        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START_NOW);
+        String message = "event." + EventTimeToStart.START_NOW;
         String messageToSend = "Event 1 start now!";
         when(messageSource.getMessage(message, new Object[]{eventId}, locale)).thenReturn(messageToSend);
 
@@ -55,8 +55,8 @@ public class EventStartMessageBuilderTest {
         Long eventId = 1L;
         Locale locale = Locale.ENGLISH;
         List<Long> participants = new ArrayList<>();
-        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START10MIN);
-        String message = "event." + EventTimeToStart.START10MIN;
+        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START_THROUGH_10_MIN);
+        String message = "event." + EventTimeToStart.START_THROUGH_10_MIN;
         String messageToSend = "Event 1 start through 10 minutes!";
         when(messageSource.getMessage(message, new Object[]{eventId}, locale)).thenReturn(messageToSend);
 
@@ -71,8 +71,8 @@ public class EventStartMessageBuilderTest {
         Long eventId = 1L;
         Locale locale = Locale.ENGLISH;
         List<Long> participants = new ArrayList<>();
-        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START1HOUR);
-        String message = "event." + EventTimeToStart.START1HOUR;
+        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START_THROUGH_1_HOUR);
+        String message = "event." + EventTimeToStart.START_THROUGH_1_HOUR;
         String messageToSend = "Event 1 start through 1 hour!";
         when(messageSource.getMessage(message, new Object[]{eventId}, locale)).thenReturn(messageToSend);
 
@@ -87,8 +87,8 @@ public class EventStartMessageBuilderTest {
         Long eventId = 1L;
         Locale locale = Locale.ENGLISH;
         List<Long> participants = new ArrayList<>();
-        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START5HOURS);
-        String message = "event." + EventTimeToStart.START5HOURS;
+        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START_THROUGH_5_HOURS);
+        String message = "event." + EventTimeToStart.START_THROUGH_5_HOURS;
         String messageToSend = "Event 1 start through 5 hours!";
         when(messageSource.getMessage(message, new Object[]{eventId}, locale)).thenReturn(messageToSend);
 
@@ -103,8 +103,8 @@ public class EventStartMessageBuilderTest {
         Long eventId = 1L;
         Locale locale = Locale.ENGLISH;
         List<Long> participants = new ArrayList<>();
-        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START1DAY);
-        String message = "event." + EventTimeToStart.START1DAY;
+        EventStartEventDto eventDto = new EventStartEventDto(eventId, participants, EventTimeToStart.START_THROUGH_1_DAY);
+        String message = "event." + EventTimeToStart.START_THROUGH_1_DAY;
         String messageToSend = "Event 1 start through 1 day!";
         when(messageSource.getMessage(message, new Object[]{eventId}, locale)).thenReturn(messageToSend);
 
