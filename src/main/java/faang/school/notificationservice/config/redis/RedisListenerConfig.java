@@ -22,7 +22,7 @@ public class RedisListenerConfig {
     @Value("${spring.data.redis.host}")
     private String host;
 
-    @Value("${spring.data.redis.channel.comment}")
+    @Value("${spring.data.redis.topic.comment}")
     private String commentTopic;
 
     @Bean
@@ -43,7 +43,7 @@ public class RedisListenerConfig {
     }
 
     @Bean
-    public MessageListenerAdapter listenerAdapter(CommentEventListener commentEventListener) {
+    public MessageListenerAdapter commentEventListenerAdapter(CommentEventListener commentEventListener) {
         return new MessageListenerAdapter(commentEventListener);
     }
 
