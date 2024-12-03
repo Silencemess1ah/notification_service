@@ -3,6 +3,7 @@ package faang.school.notificationservice.service;
 import faang.school.notificationservice.bot.TelegramBotImpl;
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.exception.TelegramBotInitException;
+import faang.school.notificationservice.exception.TelegramBotMessageSendException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ class TelegramServiceTest {
     void testSend_TelegramApiException() throws TelegramApiException {
         doThrow(new TelegramApiException("API Error")).when(telegramBot).execute(any(SendMessage.class));
 
-        TelegramBotInitException exception = assertThrows(TelegramBotInitException.class, () -> {
+        TelegramBotMessageSendException exception = assertThrows(TelegramBotMessageSendException.class, () -> {
             telegramService.send(user, message);
         });
 
