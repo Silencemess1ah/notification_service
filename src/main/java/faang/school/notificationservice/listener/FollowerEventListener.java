@@ -27,10 +27,16 @@ public class FollowerEventListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        log.info("Получено сообщение из Redis: {}", new String(message.getBody()));
+        String messageBody = new String(message.getBody());
+        log.info("Получено сообщение из Redis: {}", messageBody);
+
+        if (messageBody == null || messageBody.isEmpty()) {
+            log.warn("Получено пустое сообщение. Обработка прекращена.");
+            return;
+        }
 
         try {
-            FollowerEvent followerEvent = objectMapper.readValue(message.getBody(), FollowerEvent.class);
+            FollowerEvent followerEvent = objectMapper.readValue(messageBody, FollowerEvent.class);
             log.info("Десериализовано событие: followerId={}, followeeId={}, время события={}",
                 followerEvent.getFollowerId(), followerEvent.getFolloweeId(), followerEvent.getEventTime());
 
@@ -42,14 +48,14 @@ public class FollowerEventListener implements MessageListener {
             log.info("Сформировано сообщение для уведомления: {}", text);
 
             notificationServices.stream()
-                .filter(service -> service.getPreferredContact() == user.getPreference())
+                .filter(service -> service.getPreferredContact().equals(user.getPreference()))
                 .findFirst()
                 .ifPresentOrElse(
                     service -> {
                         service.send(user, text);
                         log.info("Уведомление отправлено через сервис: {}", service.getClass().getSimpleName());
                     },
-                    () -> log.warn("Не найден подходящий сервис для отправки уведомления.")
+                    () -> log.warn("Не найден подходящий сервис для отправки уведомления: предпочтение пользователя = {}", user.getPreference())
                 );
 
         } catch (Exception e) {
