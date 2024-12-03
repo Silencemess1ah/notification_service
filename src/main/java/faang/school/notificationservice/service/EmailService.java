@@ -1,6 +1,7 @@
 package faang.school.notificationservice.service;
 
 import faang.school.notificationservice.dto.UserDto;
+import faang.school.notificationservice.validator.EmailServiceValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,9 +15,14 @@ public class EmailService implements NotificationService {
     private final JavaMailSender mailSender;
     private final SimpleMailMessage mailMessage;
 
+    private final EmailServiceValidator emailServiceValidator;
+
     @Override
     @Async("mailExecutor")
     public void send(UserDto user, String message) {
+        emailServiceValidator.validateUserDto(user);
+        emailServiceValidator.validateMessage(message);
+
         mailMessage.setTo(user.getEmail());
         mailMessage.setText(message);
 
