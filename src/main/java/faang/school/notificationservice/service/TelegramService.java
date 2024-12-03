@@ -41,7 +41,7 @@ public class TelegramService implements NotificationService {
     @Override
     @Retryable(retryFor = TelegramBotMessageSendException.class, backoff = @Backoff(delay = 60000, multiplier = 2))
     public void send(UserDto user, String message) {
-        log.debug("Sending message to user #{} in Telegram: {}", user.getId(), message);
+        log.debug("Trying to sending message to user #{} in Telegram: {}", user.getId(), message);
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(user.getId())
                 .text(message)
