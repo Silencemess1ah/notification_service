@@ -1,7 +1,10 @@
 package faang.school.notificationservice.config.context;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import faang.school.notificationservice.LocalDateTimeArrayDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +13,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import faang.school.notificationservice.listener.FollowerEventListener;
+
+import java.time.LocalDateTime;
 
 @Configuration
 public class RedisConfig {
@@ -34,11 +43,22 @@ public class RedisConfig {
     }
 
     @Bean
+    public RedisMessageListenerContainer container(LettuceConnectionFactory lettuceConnectionFactory,
+                                                   MessageListenerAdapter listenerAdapter) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(lettuceConnectionFactory);
+        container.addMessageListener(listenerAdapter, new ChannelTopic("follower_channel"));
+        logger.info("RedisMessageListenerContainer успешно настроен.");
+        return container;
+    }
+
+    @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         logger.info("Создание RedisTemplate для взаимодействия с Redis.");
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
 
+        // Настройка сериализаторов для ключей и значений
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapperForRedisConfig()));
 
@@ -50,8 +70,23 @@ public class RedisConfig {
     public ObjectMapper objectMapperForRedisConfig() {
         logger.info("Настройка ObjectMapper для поддержки LocalDateTime.");
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+
+        // Регистрация модуля для Java Time API
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeArrayDeserializer());
+        mapper.registerModule(javaTimeModule);
+
+        // Настройки формата даты и времени
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Формат даты в ISO-8601
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Игнорировать неизвестные поля
+
         logger.info("ObjectMapper успешно настроен.");
         return mapper;
+    }
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter(FollowerEventListener followerEventListener) {
+        logger.info("Настройка MessageListenerAdapter для обработки сообщений.");
+        return new MessageListenerAdapter(followerEventListener, "onMessage");
     }
 }
