@@ -3,7 +3,6 @@ spring:
     redis:
       port: 6379
       host: localhost
-      sendMailTopic: sendMailTopic
       channel:
         follower: follower_channel
         achievement: achievement_channel
@@ -11,8 +10,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: doniyor.kurbanov.21@gmail.com
-    password: qrdm uuij knlp ncqm
+    username: spring.mail.username
+    password: spring.mail.password
     properties:
       mail:
         smtp:

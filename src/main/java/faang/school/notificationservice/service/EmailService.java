@@ -3,7 +3,6 @@ package faang.school.notificationservice.service;
 import faang.school.notificationservice.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EmailService implements NotificationService  {
     private final JavaMailSender emailSender;
-    private final RedisTemplate<String, UserDto> redisTemplate;
 
     @Override
     public void send(UserDto user, String message) {
@@ -33,9 +31,5 @@ public class EmailService implements NotificationService  {
     @Override
     public UserDto.PreferredContact getPreferredContact() {
         return UserDto.PreferredContact.EMAIL;
-    }
-
-    public void addTask(UserDto user) {
-        redisTemplate.opsForList().rightPush("emailTasks", user);
     }
 }
