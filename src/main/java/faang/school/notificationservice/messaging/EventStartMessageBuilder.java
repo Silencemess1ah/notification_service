@@ -14,7 +14,7 @@ public class EventStartMessageBuilder implements MessageBuilder<EventStartEventD
     private final MessageSource messageSource;
 
     @Override
-    public Class<?> getInstance() {
+    public Class<EventStartEventDto> supportEventType() {
         return EventStartEventDto.class;
     }
 

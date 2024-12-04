@@ -29,7 +29,7 @@ public class EventStartMessageBuilderTest {
 
     @Test
     void getInstanceTest() {
-        Class<?> result = eventStartMessageBuilder.getInstance();
+        Class<?> result = eventStartMessageBuilder.supportEventType();
 
         assertEquals(EventStartEventDto.class, result);
     }
