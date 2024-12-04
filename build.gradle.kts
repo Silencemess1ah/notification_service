@@ -1,5 +1,6 @@
 plugins {
     java
+    jacoco
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
 }
@@ -56,6 +57,37 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+/**
+ * Jacoco
+ */
+
+jacoco {
+    toolVersion = "0.8.9"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+val jacocoInclude = listOf(
+        "**/controller/**",
+        "**/service/**",
+        "**/validator/**"
+)
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.outputLocation.set(file("${buildDir}/jacocoHtml"))
+    }
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include(jacocoInclude)
+            }
+    )
 }
 
 tasks.withType<Test> {
