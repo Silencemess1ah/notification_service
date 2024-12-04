@@ -32,6 +32,7 @@ public class UserFollowerEventListener extends AbstractEventListener<UserFollowe
         super(objectMapper, userServiceClient, notificationService, messageBuilder);
     }
 
+    @Override
     public void onMessage(Message message, byte[] pattern) {
         processEvent(message, UserFollowerEvent.class, event -> {
             String messageText = getMessage(event, Locale.ENGLISH);
