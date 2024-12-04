@@ -1,6 +1,6 @@
 package faang.school.notificationservice.config.redis;
 
-import faang.school.notificationservice.listener.CommentEventListener;
+import faang.school.notificationservice.listener.RedisContainerMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -8,22 +8,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class RedisListenerConfig {
+
+    private final List<RedisContainerMessageListener> listeners;
 
     @Value("${spring.data.redis.port}")
     private int port;
 
     @Value("${spring.data.redis.host}")
     private String host;
-
-    @Value("${spring.data.redis.channels.comment}")
-    private String commentTopic;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -34,21 +33,12 @@ public class RedisListenerConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer container(RedisConnectionFactory redisConnectionFactory,
-                                                   MessageListenerAdapter messageListenerAdapter) {
+    public RedisMessageListenerContainer container() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisConnectionFactory);
-        container.addMessageListener(messageListenerAdapter, commentTopic());
+        container.setConnectionFactory(redisConnectionFactory());
+        listeners.forEach(listener ->
+                container.addMessageListener(listener.getAdapter(), listener.getTopic()));
+
         return container;
-    }
-
-    @Bean
-    public MessageListenerAdapter commentEventListenerAdapter(CommentEventListener commentEventListener) {
-        return new MessageListenerAdapter(commentEventListener);
-    }
-
-    @Bean
-    public ChannelTopic commentTopic() {
-        return new ChannelTopic(commentTopic);
     }
 }
