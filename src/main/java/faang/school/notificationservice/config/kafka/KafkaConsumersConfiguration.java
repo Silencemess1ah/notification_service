@@ -1,5 +1,6 @@
 package faang.school.notificationservice.config.kafka;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -20,17 +21,14 @@ import java.util.Map;
 @Slf4j
 @EnableKafka
 @Configuration
+@RequiredArgsConstructor
 @EnableConfigurationProperties(KafkaProperties.class)
 public class KafkaConsumersConfiguration {
 
     private final KafkaProperties kafkaProperties;
 
-    private KafkaConsumersConfiguration(KafkaProperties kafkaProperties) {
-        this.kafkaProperties = kafkaProperties;
-    }
-
     @Bean
-    public ConsumerFactory<String, Object> consumerFactory() {
+    public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaProperties.getConsumer().getAutoOffsetReset());
@@ -42,11 +40,11 @@ public class KafkaConsumersConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new
                 ConcurrentKafkaListenerContainerFactory<>();
 
-        factory.setCommonErrorHandler(errorHandler());
+        factory.setConsumerFactory(consumerFactory());
 
         return factory;
     }

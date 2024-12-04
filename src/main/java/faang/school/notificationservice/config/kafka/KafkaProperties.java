@@ -31,6 +31,4 @@ class KafkaProperties {
         private String autoOffsetReset;
         private boolean enableAutoCommit;
     }
-
-
 }

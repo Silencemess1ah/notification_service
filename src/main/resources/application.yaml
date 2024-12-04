@@ -1,7 +1,17 @@
 spring:
   data:
     kafka:
-      port: 9092
+      bootstrapServers: localhost:9092
+      interval: 500
+      maxAttempts: 3
+      partitionsCount: 1
+      replicaCount: 1
+      accountOpeningTopic: openingAccount
+      isolationLevel: read_committed
+      consumer:
+        groupId: openingAccount
+        autoOffsetReset: latest
+        enableAutoCommit: true
 
     redis:
       port: 6379
