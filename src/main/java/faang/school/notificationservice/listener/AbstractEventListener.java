@@ -1,6 +1,5 @@
 package faang.school.notificationservice.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
@@ -10,12 +9,16 @@ import faang.school.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.MappingException;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public abstract class AbstractEventListener<T> {
 
@@ -24,11 +27,11 @@ public abstract class AbstractEventListener<T> {
     private final List<NotificationService> notificationService;
     private final List<MessageBuilder<T>> messageBuilder;
 
-    public void processEvent(String message, Class<T> eventType, Consumer<T> processingEvent) {
+    public void processEvent(Message message, Class<T> eventType, Consumer<T> processingEvent) {
         try {
-            T event = objectMapper.readValue(message, eventType);
+            T event = objectMapper.readValue(message.getBody(), eventType);
             processingEvent.accept(event);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             String exceptionMessage = String.format("Unable to parse event: %s, with message: %s",
                     eventType.getName(), message);
             MappingException mappingException = new MappingException(exceptionMessage, e);
@@ -59,7 +62,8 @@ public abstract class AbstractEventListener<T> {
                 .findFirst()
                 .orElseThrow(() -> {
                     String exceptionMessage =
-                            String.format("Notification service wasn't found for user notification preference - %s",
+                            String.format("Notification service wasn't found for user with Id: %s" +
+                                            " notification preference - %s", receiverId,
                                     user.getPreference());
                     NotFoundException e = new NotFoundException(exceptionMessage);
                     log.error(exceptionMessage, e);

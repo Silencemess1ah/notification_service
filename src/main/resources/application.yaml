@@ -3,7 +3,7 @@ spring:
     redis:
       port: 6379
       host: localhost
-      topic:
+      channels:
         comment: "comment_topic"
   mail:
     host: smtp.gmail.com
@@ -42,3 +42,4 @@ project-service:
 user-service:
     host: localhost
     port: 8080
+    path: /api/v1

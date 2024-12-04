@@ -25,8 +25,7 @@ public class CommentEventListener extends AbstractEventListener<CommentEventDto>
     @Override
     public void onMessage(Message message, byte[] pattern) {
         processEvent(message, CommentEventDto.class, commentEventDto -> {
-            //maybe add locale to user
-            String text = getMessage(commentEventDto, Locale.UK);
+            String text = getMessage(commentEventDto, Locale.ENGLISH);
             sendNotification(commentEventDto.getPostCreatorId(), text);
         });
     }
