@@ -2,12 +2,10 @@ package faang.school.notificationservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -15,7 +13,7 @@ public class UserDto {
 
     private PreferredContact preferredContact;
     private String email;
-    private String name;
+    private String username;
     private Long id;
 
     public PreferredContact getPreferredContact() {

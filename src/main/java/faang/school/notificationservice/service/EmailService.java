@@ -52,11 +52,6 @@ public class EmailService implements NotificationService {
     }
 
     private void sendEmail(UserDto userDto, String text) {
-        if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
-            logger.warn("Не указан адрес электронной почты для пользователя с ID: {}", userDto.getId());
-            return;
-        }
-
         if (userDto.getPreferredContact() == null) {
             logger.warn("Предпочтение пользователя не указано, используется значение по умолчанию: EMAIL");
             userDto.setPreferredContact(UserDto.PreferredContact.EMAIL);
@@ -66,7 +61,7 @@ public class EmailService implements NotificationService {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(userDto.getEmail());
             mailMessage.setSubject("Новое уведомление от NotificationService");
-            mailMessage.setText(String.format("Здравствуйте, %s!\n\n%s", userDto.getName(), text));
+            mailMessage.setText(String.format("Здравствуйте, %s!\n\n%s", userDto.getUsername(), text));
 
             mailSender.send(mailMessage);
             logger.info("Письмо успешно отправлено на адрес: {}", userDto.getEmail());
