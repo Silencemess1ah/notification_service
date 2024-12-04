@@ -27,7 +27,8 @@ public class UserFollowerEventListener extends AbstractEventListener<UserFollowe
             ObjectMapper objectMapper,
             UserServiceClient userServiceClient,
             List<NotificationService> notificationService,
-            List<MessageBuilder<UserFollowerEvent>> messageBuilder) {
+            List<MessageBuilder<UserFollowerEvent>> messageBuilder
+    ) {
         super(objectMapper, userServiceClient, notificationService, messageBuilder);
     }
 
