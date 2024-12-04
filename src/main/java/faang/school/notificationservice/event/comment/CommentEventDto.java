@@ -1,4 +1,4 @@
-package faang.school.notificationservice.dto.comment;
+package faang.school.notificationservice.event.comment;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,7 @@ package faang.school.notificationservice.messaging;
 
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
-import faang.school.notificationservice.dto.comment.CommentEventDto;
+import faang.school.notificationservice.event.comment.CommentEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
