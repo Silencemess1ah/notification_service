@@ -42,20 +42,20 @@ public class FollowerEventListener implements MessageListener {
 
             UserDto user = userServiceClient.getUser(followerEvent.getFolloweeId());
             log.info("Получены данные пользователя: userId={}, email={}, предпочтение={}",
-                user.getId(), user.getEmail(), user.getPreference());
+                user.getId(), user.getEmail(), user.getPreferredContact());
 
             String text = messageBuilder.buildMessage(followerEvent, Locale.getDefault());
             log.info("Сформировано сообщение для уведомления: {}", text);
 
             notificationServices.stream()
-                .filter(service -> service.getPreferredContact().equals(user.getPreference()))
+                .filter(service -> service.getPreferredContact().equals(user.getPreferredContact()))
                 .findFirst()
                 .ifPresentOrElse(
                     service -> {
                         service.send(user, text);
                         log.info("Уведомление отправлено через сервис: {}", service.getClass().getSimpleName());
                     },
-                    () -> log.warn("Не найден подходящий сервис для отправки уведомления: предпочтение пользователя = {}", user.getPreference())
+                    () -> log.warn("Не найден подходящий сервис для отправки уведомления: предпочтение пользователя = {}", user.getPreferredContact())
                 );
 
         } catch (Exception e) {
