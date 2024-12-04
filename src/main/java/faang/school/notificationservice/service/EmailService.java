@@ -1,14 +1,23 @@
 package faang.school.notificationservice.service;
 
 import faang.school.notificationservice.dto.UserDto;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
-@Service
-public class EmailService implements NotificationService{
-    //Выполняется в задаче BJS2-41820
+@Component
+@RequiredArgsConstructor
+public class EmailService implements NotificationService {
+
+    private final JavaMailSender emailSender;
+
     @Override
     public void send(UserDto user, String message) {
-        System.out.println("Сообщение отправлено по емайлу " + message + " пользователю " + user.getUsername());
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setText(message);
+        emailSender.send(mailMessage);
     }
 
     @Override
