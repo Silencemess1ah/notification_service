@@ -1,6 +1,7 @@
 package faang.school.notificationservice.service;
 
 import faang.school.notificationservice.dto.UserDto;
+import faang.school.notificationservice.exception.EmailSendingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,7 +24,7 @@ public class EmailService implements NotificationService  {
         try {
             emailSender.send(mailMessage);
             log.info("Email sent to: {}", user.getEmail());
-        } catch (Exception e) {
+        } catch (EmailSendingException e) {
             log.error("Failed to send email to: {}", user.getEmail(), e);
         }
     }
