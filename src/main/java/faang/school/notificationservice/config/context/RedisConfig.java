@@ -33,6 +33,9 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
+    @Value("${spring.data.redis.channel.follower}")
+    private String followerChannel;
+
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
         logger.info("Настройка соединения с Redis: хост={}, порт={}", redisHost, redisPort);
@@ -53,8 +56,8 @@ public class RedisConfig {
         logger.info("Настройка RedisMessageListenerContainer...");
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
-        container.addMessageListener(listenerAdapter, new ChannelTopic("follower_channel"));
-        logger.info("RedisMessageListenerContainer успешно настроен для канала 'follower_channel'.");
+        container.addMessageListener(listenerAdapter, new ChannelTopic(followerChannel));
+        logger.info("RedisMessageListenerContainer успешно настроен для канала 'followerChannel'.");
         return container;
     }
 
