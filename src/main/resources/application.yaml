@@ -27,6 +27,8 @@ spring:
 
 server:
   port: 8083
+  servlet:
+    content-path: /api/v1
 
 logging:
   level:
@@ -44,3 +46,8 @@ project-service:
 user-service:
     host: localhost
     port: 8080
+
+telegram:
+  bot:
+    username: CorpXDragonBot
+    token: 8178913921:AAGcrhifCTplnAjqGPJUs1rNa0wA-aQBkns
