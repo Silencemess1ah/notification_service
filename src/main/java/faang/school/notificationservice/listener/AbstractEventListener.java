@@ -1,5 +1,6 @@
 package faang.school.notificationservice.listener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.MappingException;
 import org.springframework.data.redis.connection.Message;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public abstract class AbstractEventListener<T> {
 
@@ -62,8 +61,8 @@ public abstract class AbstractEventListener<T> {
                 .findFirst()
                 .orElseThrow(() -> {
                     String exceptionMessage =
-                            String.format("Notification service wasn't found for user with Id: %s" +
-                                            " notification preference - %s", receiverId,
+                            String.format("Notification service wasn't found for user with Id: %s," +
+                                            "user notification preference - %s", receiverId,
                                     user.getPreference());
                     NotFoundException e = new NotFoundException(exceptionMessage);
                     log.error(exceptionMessage, e);
