@@ -1,4 +1,4 @@
-package faang.school.notificationservice.config.context.telegram;
+package faang.school.notificationservice.config.telegram;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;

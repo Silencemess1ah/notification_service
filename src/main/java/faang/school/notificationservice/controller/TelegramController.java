@@ -1,7 +1,7 @@
 package faang.school.notificationservice.controller;
 
 import faang.school.notificationservice.client.UserServiceClient;
-import faang.school.notificationservice.config.context.telegram.MessageRequest;
+import faang.school.notificationservice.config.telegram.MessageRequest;
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.service.telegram.TelegramService;
 import lombok.RequiredArgsConstructor;
