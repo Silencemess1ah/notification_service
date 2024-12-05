@@ -61,7 +61,7 @@ public abstract class AbstractEventListener<T> implements MessageListener {
                 .findFirst()
                 .orElseThrow(() -> {
                     String exceptionMessage =
-                            String.format("Notification service wasn't found for user with Id: %s," +
+                            String.format("Notification service wasn't found for user with Id: %s, " +
                                             "user notification preference - %s", receiverId,
                                     user.getPreference());
                     NotFoundException e = new NotFoundException(exceptionMessage);
