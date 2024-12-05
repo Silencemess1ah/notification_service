@@ -26,6 +26,7 @@ public class EmailService implements NotificationService  {
             log.info("Email sent to: {}", user.getEmail());
         } catch (EmailSendingException e) {
             log.error("Failed to send email to: {}", user.getEmail(), e);
+            throw new EmailSendingException("Error while sending email: " + e.getMessage());
         }
     }
 
