@@ -7,19 +7,14 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-public class UserContactsDto {
-    private Long id;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-
+public class UserContactsDto {
     @PositiveOrZero(message = "Id must be positive or zero")
     @NotNull(message = "Id is required")
     private long id;
@@ -43,3 +38,4 @@ public class UserDto {
         EMAIL, SMS, TELEGRAM
     }
 }
+

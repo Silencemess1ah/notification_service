@@ -74,8 +74,8 @@ class RecommendationReceivedEventlistenerTest {
     @DisplayName("Should process event and send email notification")
     void onMessage_Success_EmailNotification() throws Exception {
         RecommendationReceivedEvent event = new RecommendationReceivedEvent(1L, 2L, 3L);
-        UserContactsDto receiver = new UserContactsDto(2L, "Receiver", "receiver@example.com", "12345", UserContactsDto.PreferredContact.EMAIL);
-        UserContactsDto author = new UserContactsDto(3L, "Author", "author@example.com", "67890", UserContactsDto.PreferredContact.EMAIL);
+        UserContactsDto receiver = new UserContactsDto(2L, "Receiver", "receiver@example.com", "12345", faang.school.notificationservice.dto.UserContactsDto.PreferredContact.EMAIL);
+        UserContactsDto author = new UserContactsDto(3L, "Author", "author@example.com", "67890", faang.school.notificationservice.dto.UserContactsDto.PreferredContact.EMAIL);
         String messageBody = "{\"recommendationId\":1,\"receiverId\":2,\"authorId\":3}";
         String generatedMessage = "Receiver, Author sent you a recommendation!";
 
