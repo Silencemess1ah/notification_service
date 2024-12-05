@@ -2,8 +2,7 @@ package faang.school.notificationservice.service;
 
 import faang.school.notificationservice.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.Scanner;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class EmailService implements NotificationService {
 
     private final JavaMailSender mailSender;
-    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 //    private final SmsService smsService; // Сервис для SMS
 //    private final TelegramService telegramService; // Сервис для Telegram
 
@@ -53,7 +52,7 @@ public class EmailService implements NotificationService {
 
     private void sendEmail(UserDto userDto, String text) {
         if (userDto.getPreferredContact() == null) {
-            logger.warn("Предпочтение пользователя не указано, используется значение по умолчанию: EMAIL");
+            log.warn("Предпочтение пользователя не указано, используется значение по умолчанию: EMAIL");
             userDto.setPreferredContact(UserDto.PreferredContact.EMAIL);
         }
 
@@ -64,9 +63,9 @@ public class EmailService implements NotificationService {
             mailMessage.setText(String.format("Здравствуйте, %s!\n\n%s", userDto.getUsername(), text));
 
             mailSender.send(mailMessage);
-            logger.info("Письмо успешно отправлено на адрес: {}", userDto.getEmail());
+            log.info("Письмо успешно отправлено на адрес: {}", userDto.getEmail());
         } catch (MailException e) {
-            logger.error("Ошибка при отправке письма на адрес {}: {}", userDto.getEmail(), e.getMessage());
+            log.error("Ошибка при отправке письма на адрес {}: {}", userDto.getEmail(), e.getMessage());
         }
     }
 
