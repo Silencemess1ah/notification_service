@@ -9,6 +9,7 @@ spring:
       channel:
         follower: follower_channel
         achievement: achievement_channel
+        profile-view: profile-view
 
   mail:
     host: smtp.gmail.com

@@ -21,4 +21,5 @@ public class NotificationServiceApp {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
 }
