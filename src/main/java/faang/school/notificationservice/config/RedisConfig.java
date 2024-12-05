@@ -12,8 +12,8 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 @Configuration
 @RequiredArgsConstructor
 public class RedisConfig {
-    RedisProperties redisProperties;
-    RecommendationReceivedEventListener recommendationReceivedEventListener;
+    private final RedisProperties redisProperties;
+    private final RecommendationReceivedEventListener recommendationReceivedEventListener;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
@@ -29,10 +29,12 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisMessageListenerContainer() {
+    RedisMessageListenerContainer redisMessageListenerContainer(
+            JedisConnectionFactory jedisConnectionFactory,
+            ChannelTopic recommendationTopic) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(recommendationReceivedEventListener, recommendationTopic());
+        container.setConnectionFactory(jedisConnectionFactory);
+        container.addMessageListener(recommendationReceivedEventListener, recommendationTopic);
         return container;
     }
 }
