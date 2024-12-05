@@ -67,6 +67,6 @@ public abstract class AbstractEventListener<T> {
                     return e;
                 })
                 .send(user, message);
-        log.info(String.format("Notification service sent notification - %s .To user with id %d", message, receiverId));
+        log.info("Notification service sent notification - {} .To user with id {}", message, receiverId);
     }
 }

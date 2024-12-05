@@ -12,6 +12,7 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Component
@@ -27,6 +28,9 @@ public class AchievementEventListener extends AbstractEventListener<AchievementE
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        processEvent(message, AchievementEvent.class, (event) -> log.info("{}", event));
+        processEvent(message, AchievementEvent.class, event -> {
+            String messageText = getMessage(event, Locale.ENGLISH);
+            sendNotification(event.getUserId(), messageText);
+        });
     }
 }
