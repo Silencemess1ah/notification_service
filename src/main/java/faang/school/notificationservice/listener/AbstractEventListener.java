@@ -68,6 +68,6 @@ public abstract class AbstractEventListener<T> implements MessageListener {
                     return e;
                 })
                 .send(user, message);
-        log.info(String.format("Notification service sent notification - %s .To user with id %d", message, receiverId));
+        log.info(String.format("Notification service sent notification - %s. To user with id %d", message, receiverId));
     }
 }
