@@ -3,15 +3,22 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channel:
+      channels:
         follower: follower_channel
-        achievement: achievement_channel
+        achievementEvent: achievement_channel
+        goalCompletedEvent: goal_completed_event_channel
+        likePostChannel: like_post_channel
+        newComment: new_comment_channel
+        recommendationRequestEvent: recommendation_request_event
+        skillAcquiredChannel: skill_acquired_channel
+        projectChannel: project_channel
+        profileView: profile_view_channel
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: your_email@gmail.com #https://www.baeldung.com/spring-email
-    password: whatever #генерируем для своего Google аккаунта по инструкции https://support.google.com/accounts/answer/185833
+    username: varvarastepnova915@gmail.com #https://www.baeldung.com/spring-email
+    password: 123 #генерируем для своего Google аккаунта по инструкции https://support.google.com/accounts/answer/185833
     properties:
       mail:
         smtp:
@@ -21,9 +28,14 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+    subject: "Получено новое уведомление!"
 
   messages:
     basename: messages
+
+  tg:
+    name: UnicornCorpX_bot
+    token: 7128232509:AAFtd-A11vnxOVfC7W9E9foN2Sk2gqYSXZA
 
 server:
   port: 8083
@@ -37,6 +49,7 @@ vonage: #https://dashboard.nexmo.com/getting-started/sms
   api:
     key: whatever
     secret: whatever
+    sender: faang.school
 
 project-service:
     host: localhost
@@ -44,3 +57,11 @@ project-service:
 user-service:
     host: localhost
     port: 8080
+post-service:
+  host: localhost
+  port: 8081
+
+builder:
+  newCommentEventOpt:
+    startMessageIndex: 0
+    lastMessageIndex: 20
