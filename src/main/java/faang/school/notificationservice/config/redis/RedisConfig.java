@@ -22,9 +22,6 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
-    @Value("${spring.data.redis.channel.achievement}")
-    private String achievementTopic;
-
     @Value("${spring.data.redis.channel.event_start}")
     private String eventStartTopic;
 
@@ -51,16 +48,11 @@ public class RedisConfig {
 
 
     @Bean
-    ChannelTopic achievementTopic() {
-        return new ChannelTopic(achievementTopic);
-    }
-
-    @Bean
     RedisMessageListenerContainer redisContainer(AchievementEventListener achievementEventListener,
                                                  EventStartEventListener eventStartEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(achievementEventListener, achievementTopic());
+        container.addMessageListener(achievementEventListener.getAdapter(), achievementEventListener.getTopic());
         container.addMessageListener(eventStartListener(eventStartEventListener), eventStartTopic());
         return container;
     }

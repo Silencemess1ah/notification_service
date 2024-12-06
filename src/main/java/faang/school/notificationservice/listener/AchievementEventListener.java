@@ -7,8 +7,11 @@ import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.Topic;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +19,10 @@ import java.util.Locale;
 
 @Slf4j
 @Component
-public class AchievementEventListener extends AbstractEventListener<AchievementEvent> implements MessageListener {
+public class AchievementEventListener extends AbstractEventListener<AchievementEvent>  {
+
+    @Value("${spring.data.redis.channel.achievement}")
+    private String topicName;
 
     @Autowired
     public AchievementEventListener(ObjectMapper objectMapper,
@@ -32,5 +38,15 @@ public class AchievementEventListener extends AbstractEventListener<AchievementE
             String messageText = getMessage(event, Locale.ENGLISH);
             sendNotification(event.getUserId(), messageText);
         });
+    }
+
+    @Override
+    public MessageListenerAdapter getAdapter() {
+        return new MessageListenerAdapter(this);
+    }
+
+    @Override
+    public Topic getTopic() {
+        return new ChannelTopic(topicName);
     }
 }
