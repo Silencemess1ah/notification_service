@@ -1,9 +1,8 @@
-package faang.school.notificationservice.redis;
+package faang.school.notificationservice.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.EventStartEventDto;
-import faang.school.notificationservice.listener.AbstractEventListener;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import org.springframework.data.redis.connection.Message;
@@ -32,4 +31,5 @@ public class EventStartEventListener extends AbstractEventListener<EventStartEve
     public void onMessage(Message message, byte[] pattern) {
         processEvent(message, EventStartEventDto.class, sendNotifications);
     }
+
 }

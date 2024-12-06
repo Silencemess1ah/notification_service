@@ -1,8 +1,10 @@
 package faang.school.notificationservice.config.redis;
 
-import faang.school.notificationservice.redis.EventStartEventListener;
+import faang.school.notificationservice.listener.ProfileViewEventListener;
+import faang.school.notificationservice.listener.EventStartEventListener;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,9 @@ public class RedisConfig {
     @Value("${spring.data.redis.channel.event_start}")
     private String eventStartTopic;
 
+    @Value("${spring.data.redis.channel.profile-view}")
+    private String profileViewChannel;
+
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         return new JedisConnectionFactory();
@@ -34,10 +39,13 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(EventStartEventListener eventStartEventListener) {
+    RedisMessageListenerContainer redisContainer(EventStartEventListener eventStartEventListener,
+                                                 ProfileViewEventListener profileViewEventListener) {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(eventStartListener(eventStartEventListener), eventStartTopic());
+        container.addMessageListener(profileViewListener(profileViewEventListener), profileViewTopic());
+
         return container;
     }
 
@@ -49,5 +57,16 @@ public class RedisConfig {
     @Bean
     ChannelTopic eventStartTopic() {
         return new ChannelTopic(eventStartTopic);
+    }
+
+    @Bean
+    @Qualifier("profileViewListener")
+    MessageListenerAdapter profileViewListener(ProfileViewEventListener profileViewEventListener) {
+        return new MessageListenerAdapter(profileViewEventListener);
+    }
+
+    @Bean
+    ChannelTopic profileViewTopic() {
+        return new ChannelTopic(profileViewChannel);
     }
 }
