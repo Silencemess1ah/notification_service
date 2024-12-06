@@ -1,7 +1,6 @@
 package faang.school.notificationservice.config.redis;
 
 import faang.school.notificationservice.listener.RedisContainerMessageListener;
-import faang.school.notificationservice.listener.impl.MentorshipAcceptedEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +40,7 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(MentorshipAcceptedEventListener mentorshipAcceptedEventListener) {
+    RedisMessageListenerContainer redisContainer() {
         RedisMessageListenerContainer redisContainer = new RedisMessageListenerContainer();
         redisContainer.setConnectionFactory(jedisConnectionFactory());
         listeners.forEach(listener -> redisContainer.addMessageListener(listener.getAdapter(), listener.getTopic()));
