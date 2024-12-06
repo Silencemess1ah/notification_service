@@ -1,18 +1,24 @@
 package faang.school.notificationservice.dto;
 
+import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
-    private Long id;
+    private long id;
     private String username;
     private String email;
-    private Long telegramChatId;
     private String phone;
+    private long telegramChatId;
     private PreferredContact preference;
 
     @JsonCreator
