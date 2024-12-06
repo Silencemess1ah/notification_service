@@ -1,8 +1,9 @@
-package faang.school.notificationservice.listener;
+package faang.school.notificationservice.listener.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.event.AchievementEvent;
+import faang.school.notificationservice.listener.AbstractEventListener;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import java.util.Locale;
 
 @Slf4j
 @Component
-public class AchievementEventListener extends AbstractEventListener<AchievementEvent>  {
+public class AchievementEventListener extends AbstractEventListener<AchievementEvent> {
 
     @Value("${spring.data.redis.channel.achievement}")
     private String topicName;
