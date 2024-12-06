@@ -65,7 +65,7 @@ class EmailServiceTest {
         doThrow(new MailException("Mail sending failed") {}).when(mailSender).send(any(SimpleMailMessage.class));
 
         Method sendEmailMethod = EmailService.class.getDeclaredMethod("sendEmail", UserDto.class, String.class);
-        sendEmailMethod.setAccessible(true);  // Делаем метод доступным
+        sendEmailMethod.setAccessible(true);
 
         assertDoesNotThrow(() -> sendEmailMethod.invoke(emailService, userDto, messageText));
     }
