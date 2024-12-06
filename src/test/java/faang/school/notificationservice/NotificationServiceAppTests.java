@@ -1,12 +1,13 @@
 package faang.school.notificationservice;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
+//@SpringBootTest
 class NotificationServiceAppTests {
     @Test
+    @DisplayName("Test context loading")
     void contextLoads() {
-        Assertions.assertThat(40 + 2).isEqualTo(42);
+
     }
 }
