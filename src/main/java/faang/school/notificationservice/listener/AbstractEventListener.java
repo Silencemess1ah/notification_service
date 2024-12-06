@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class AbstractEventListener<T> implements MessageListener {
+public abstract class AbstractEventListener<T> implements MessageListener, RedisContainerMessageListener {
 
     private final ObjectMapper objectMapper;
     private final UserServiceClient userServiceClient;
@@ -69,6 +69,6 @@ public abstract class AbstractEventListener<T> implements MessageListener {
                     return e;
                 })
                 .send(user, message);
-        log.info(String.format("Notification service sent notification - %s .To user with id %d", message, receiverId));
+        log.info("Notification service sent notification - {}. To user with id: {}", message, receiverId);
     }
 }

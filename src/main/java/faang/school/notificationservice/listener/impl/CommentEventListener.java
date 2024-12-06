@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.event.comment.CommentEventDto;
 import faang.school.notificationservice.listener.AbstractEventListener;
-import faang.school.notificationservice.listener.RedisContainerMessageListener;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Component
-public class CommentEventListener extends AbstractEventListener<CommentEventDto>
-        implements RedisContainerMessageListener {
+public class CommentEventListener extends AbstractEventListener<CommentEventDto> {
 
     @Value("${spring.data.redis.channels.comment}")
     private String commentTopic;
