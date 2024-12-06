@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class AbstractEventListener<T> implements MessageListener {
+public abstract class AbstractEventListener<T> implements MessageListener, RedisContainerMessageListener {
 
     private final ObjectMapper objectMapper;
     private final UserServiceClient userServiceClient;

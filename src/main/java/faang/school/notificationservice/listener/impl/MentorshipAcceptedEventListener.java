@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.event.MentorshipAcceptedEvent;
 import faang.school.notificationservice.listener.AbstractEventListener;
-import faang.school.notificationservice.listener.RedisContainerMessageListener;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Component
-public class MentorshipAcceptedEventListener extends AbstractEventListener<MentorshipAcceptedEvent> implements RedisContainerMessageListener {
+public class MentorshipAcceptedEventListener extends AbstractEventListener<MentorshipAcceptedEvent> {
 
     @Value("${spring.data.redis.channel.mentorship.accepted}")
     private String mentorshipAcceptedChannel;
