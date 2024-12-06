@@ -33,12 +33,12 @@ class MentorshipAcceptedEventMessageBuilderTest {
     @Test
     void buildMessageTest() {
         MentorshipAcceptedEvent event = new MentorshipAcceptedEvent();
-        long receiverId = 2L;
-        event.setReceiverId(receiverId);
+        String receiverUsername = "perec";
+        event.setReceiverUsername(receiverUsername);
         Locale locale = Locale.UK;
         String expectedMessage = "Congrats! Your request to the user with ID 2 for mentoring has been accepted!";
         String messageCode = "mentorship.accepted";
-        when(messageSource.getMessage(messageCode, new Object[] {receiverId}, locale)).thenReturn(expectedMessage);
+        when(messageSource.getMessage(messageCode, new Object[] {receiverUsername}, locale)).thenReturn(expectedMessage);
 
         String builtMessage = assertDoesNotThrow(() -> builder.buildMessage(event, locale));
 
