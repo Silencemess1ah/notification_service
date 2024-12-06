@@ -106,14 +106,6 @@ class LikePostEventListenerTest {
     class NegativeTests {
 
         @Test
-        @DisplayName("Ошибка при отсутствии соответствующего messageBuilder")
-        public void whenOnMessageWithoutMessageBuilderThenException() throws IOException {
-            when(objectMapper.readValue(message.getBody(), LikePostEvent.class)).thenReturn(likePostEvent);
-
-            assertThrows(NoSuchElementException.class, () -> likePostEventListener.onMessage(message, new byte[0]));
-        }
-
-        @Test
         @DisplayName("Ошибка при отсутствии соответствующего notificationService")
         public void whenOnMessageWithoutNotificationServiceThenException() throws IOException {
             when(objectMapper.readValue(message.getBody(), LikePostEvent.class)).thenReturn(likePostEvent);

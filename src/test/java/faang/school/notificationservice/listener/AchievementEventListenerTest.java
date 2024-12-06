@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.event.AchievementEvent;
 import faang.school.notificationservice.dto.user.UserDto;
-import faang.school.notificationservice.messaging.AchievementEvenBuilder;
+import faang.school.notificationservice.messaging.AchievementEventBuilder;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import faang.school.notificationservice.service.email.EmailService;
@@ -48,7 +48,7 @@ class AchievementEventListenerTest {
     private UserServiceClient userServiceClient;
 
     @Mock
-    private AchievementEvenBuilder achievementEvenBuilder;
+    private AchievementEventBuilder achievementEventBuilder;
 
     @Mock
     private EmailService emailService;
@@ -88,9 +88,9 @@ class AchievementEventListenerTest {
             when(objectMapper.readValue(message.getBody(), AchievementEvent.class))
                     .thenReturn(achievementEvent);
             when(userServiceClient.getUser(anyLong())).thenReturn(userDto);
-            messageBuilders.put(AchievementEvent.class, achievementEvenBuilder);
+            messageBuilders.put(AchievementEvent.class, achievementEventBuilder);
             notificationServices.put(UserDto.PreferredContact.EMAIL, emailService);
-            when(achievementEvenBuilder.buildMessage(eq(achievementEvent), any(Locale.class)))
+            when(achievementEventBuilder.buildMessage(eq(achievementEvent), any(Locale.class)))
                     .thenReturn(MESSAGE);
             doNothing().when(emailService).send(userDto, MESSAGE);
 
@@ -98,7 +98,7 @@ class AchievementEventListenerTest {
 
             verify(objectMapper).readValue(message.getBody(), AchievementEvent.class);
             verify(userServiceClient).getUser(anyLong());
-            verify(achievementEvenBuilder).buildMessage(eq(achievementEvent), any(Locale.class));
+            verify(achievementEventBuilder).buildMessage(eq(achievementEvent), any(Locale.class));
             verify(emailService).send(userDto, MESSAGE);
         }
     }
@@ -122,8 +122,8 @@ class AchievementEventListenerTest {
             when(objectMapper.readValue(message.getBody(), AchievementEvent.class))
                     .thenReturn(achievementEvent);
             when(userServiceClient.getUser(anyLong())).thenReturn(userDto);
-            messageBuilders.put(AchievementEvent.class, achievementEvenBuilder);
-            when(achievementEvenBuilder.buildMessage(eq(achievementEvent), any(Locale.class)))
+            messageBuilders.put(AchievementEvent.class, achievementEventBuilder);
+            when(achievementEventBuilder.buildMessage(eq(achievementEvent), any(Locale.class)))
                     .thenReturn(MESSAGE);
 
             assertThrows(NoSuchElementException.class,

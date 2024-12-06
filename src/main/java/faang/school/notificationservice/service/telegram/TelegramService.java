@@ -35,13 +35,10 @@ public class TelegramService extends TelegramLongPollingBot implements Notificat
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            switch (messageText) {
-                case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                    break;
-                default:
-                    //MIRROR
-                    sendMessage(chatId, messageText);
+            if (messageText.equals("/start")) {
+                startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+            } else {
+                sendMessage(chatId, messageText);
             }
         }
     }

@@ -16,10 +16,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AchievementEvenBuilderTest {
+class AchievementEventBuilderTest {
 
     @InjectMocks
-    private AchievementEvenBuilder achievementEvenBuilder;
+    private AchievementEventBuilder achievementEventBuilder;
 
     @Mock
     private MessageSource messageSource;
@@ -30,7 +30,7 @@ class AchievementEvenBuilderTest {
     @Test
     @DisplayName("Успешное возвращение AchievementEvent.class")
     public void whenGetInstanceReturnLikePostEvent() {
-        assertEquals(AchievementEvent.class, achievementEvenBuilder.getInstance());
+        assertEquals(AchievementEvent.class, achievementEventBuilder.getInstance());
     }
 
     @Test
@@ -40,7 +40,7 @@ class AchievementEvenBuilderTest {
         Locale locale = Locale.UK;
         when(messageSource.getMessage(PROPERTY_NAME, new Object[]{}, locale)).thenReturn(EXPECTED_MESSAGE);
 
-        String actualMessage = achievementEvenBuilder.buildMessage(event, locale);
+        String actualMessage = achievementEventBuilder.buildMessage(event, locale);
 
         assertEquals(EXPECTED_MESSAGE, actualMessage);
         verify(messageSource).getMessage(PROPERTY_NAME, new Object[]{}, locale);
