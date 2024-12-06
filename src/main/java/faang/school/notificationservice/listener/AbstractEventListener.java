@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class AbstractEventListener<T> implements MessageListener {
+public abstract class AbstractEventListener<T> implements MessageListener, RedisContainerMessageListener {
 
     private final ObjectMapper objectMapper;
     private final UserServiceClient userServiceClient;
@@ -56,7 +56,8 @@ public abstract class AbstractEventListener<T> implements MessageListener {
     public void sendNotification(long receiverId, String message) {
         UserDto user = userServiceClient.getUser(receiverId);
         notificationService.stream()
-                .filter(notificationService -> notificationService.getPreferredContact() == user.getPreference())
+                .filter(notificationService -> notificationService.getPreferredContact().
+                        equals(user.getPreference()))
                 .findFirst()
                 .orElseThrow(() -> {
                     String exceptionMessage =

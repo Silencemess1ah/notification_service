@@ -20,6 +20,6 @@ public class UserFollowerEventMessageBuilder implements MessageBuilder<UserFollo
 
     @Override
     public String buildMessage(UserFollowerEvent event, Locale locale) {
-        return messageSource.getMessage(MESSAGE_KEY, new Object[]{}, locale);
+        return messageSource.getMessage(MESSAGE_KEY, new Object[]{event.getFollowerId()}, locale);
     }
 }

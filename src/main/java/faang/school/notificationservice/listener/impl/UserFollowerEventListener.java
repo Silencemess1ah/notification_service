@@ -3,7 +3,6 @@ package faang.school.notificationservice.listener.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.listener.AbstractEventListener;
-import faang.school.notificationservice.listener.RedisContainerMessageListener;
 import faang.school.notificationservice.event.UserFollowerEvent;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Component
-public class UserFollowerEventListener extends AbstractEventListener<UserFollowerEvent> implements RedisContainerMessageListener {
+public class UserFollowerEventListener extends AbstractEventListener<UserFollowerEvent> {
 
     @Value("${spring.data.redis.channel.follower}")
     private String channelName;
